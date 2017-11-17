@@ -13,23 +13,23 @@ class TestCallbackTestCase(unittest.TestCase):
     def setUp(self):
         self.CB = HxCallback(headers,addbody,modifybody)
 
-    def testAddCB(self):
+    def testAddCB_1(self):
         u'''新增一个Callback'''
         self.assertEqual(self.CB.addcallback(),200)
 
-    def QueryCBs(self):
+    def QueryCBs_2(self):
         u'''查询Callback'''
         self.assertEqual(self.CB.querycallbacks(),200)
 
-    def QueryCBDetail(self):
+    def QueryCBDetail_3(self):
         u'''查询一个Callback祥情'''
         self.assertEqual(self.CB.queryCBDetail(),200)
 
-    def ModifyCB(self):
+    def ModifyCB_4(self):
         u'''修改一个Callback'''
         self.assertEqual(self.CB.modifyCB(),200)
 
-    def DeleteCB(self):
+    def DeleteCB_5(self):
         u'''删除一个Callback'''
         self.assertEqual(self.CB.deleteCB(),200)
 

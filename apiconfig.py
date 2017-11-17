@@ -1,17 +1,23 @@
 #coding: utf-8
 
 import requests,json
-import datetime
+import datetime,sys
 
 
-url = "http://a1.easemob.com"
-org = "easemob-demo"
-app = "chatdemoui"
-client_id = "YXA6TX5LoNxKEeOQ1eH_uqza9Q"
-client_secret =  "YXA6DML6OxuXqwhjoetT7PX_eBQzg_M"
-user1 = "online113"
-user2 = "online112"
+url = sys.argv[1]
+org = sys.argv[2]
+app = sys.argv[3]
+username = sys.argv[4]
+password = sys.argv[5]
+
+
+user1 = "rest111"
+user2 = "rest112"
+user3 = "rest113"
+user4 = "rest114"
+user5 = "rest115"
 messages = "message from automation rest test"
+
 
 #get before 3 days date
 historymess = datetime.datetime.now() - datetime.timedelta(days=3)
@@ -19,14 +25,13 @@ olddate = historymess.strftime('%Y%m%d%H')
 
 
 ## get Admin token
-def acquire_token(url,org,app,client_id,client_secret):
+def acquire_token(url,username,password):
     tokenbody = {
-        "grant_type": "client_credentials",
-        "client_id": client_id ,
-        "client_secret": client_secret
-      }
+        "grant_type":"password",
+        "username":username,
+        "password":password }
     try:
-        req = requests.post("%s/%s/%s/token" %(url,org,app),data=json.dumps(tokenbody),headers={'Content-Type': 'application/json'})
+        req = requests.post("%s/management/token" %(url),data=json.dumps(tokenbody),headers={'Accept':'application/json','Content-Type': 'application/json'})
     except requests.exceptions.ConnectionError,e:
         return "Your url is error :", e.message
     try:
@@ -41,9 +46,9 @@ def acquire_token(url,org,app,client_id,client_secret):
         return e,e.message
 
 
-token,expires_in = acquire_token(url,org,app,client_id,client_secret)
+token,expires_in = acquire_token(url,username,password)
 
-print "Token is: %s, Expires_in is: %s" %(token,expires_in)
+#print "Token is: %s, Expires_in is: %s" %(token,expires_in)
 
 
 headers = {'Accept': 'application/json',

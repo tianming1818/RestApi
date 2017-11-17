@@ -26,51 +26,6 @@ sendbodytwo={ "target_type":"users",
                   "from":"rest"
                 }
 
-sendImagebody = { "target_type":"users",
-    "target":[user1,user2],
-    "msg":{
-        "type":"img",
-        "url":"https://a1.easemob.com/easemob-demo/chatdemoui/chatfiles/c8ae5ad0-a5a7-11e6-b991-65e029430485",
-        "filename":"lorex.jpg",
-        "secret":"yK5a2qWnEeaRcJUaVNstNOVVTjuqBVyib-rF7Vw1xSVn28X4",
-        "size":{
-        "width":480,
-        "height":480
-      }
-     },
-    "from":"rest"
-}
-
-sendAudiobody = { "target_type":"users",
-    "target":[user1,user2],
-    "msg":{
-        "type":"audio",
-        "url":"https://a1.easemob.com/easemob-demo/chatdemoui/chatfiles/76635950-a5a8-11e6-9387-3f2d3a91e533",
-        "filename":"audio sample.amr",
-        "secret":"dmNZWqWoEeaDymsQPaQ9I3Wcs05uXfMWGn0KuRdR87wqko70",
-        "size":{
-        "width":480,
-        "height":480
-      }
-     },
-    "from":"rest"
-}
-
-sendVideobody = { "target_type":"users",
-    "target":[user1,user2],
-    "msg":{
-        "type":"video",
-        "url":"https://a1.easemob.com/easemob-demo/chatdemoui/chatfiles/9887d140-a649-11e6-b383-4541f7075ce8",
-        "filename":"111.mp4",
-        "length": 5,
-        "secret":"mIfRSqZJEeaei5tHtLW4f-e_Zh4N_-DOwtX4nFIOvUitGtHJ",
-        "thumb": "https://a1.easemob.com/easemob-demo/chatdemoui/chatfiles/f6a5a3a0-a64a-11e6-8a7b-51138be95708",
-        "thumb_secret": "9qWjqqZKEeaeHwuBpYinrXmDsuAtOTQ2Ad8JW34Gtdj5XrnD",
-        "file_length": 8699
-     },
-    "from":"rest"
-}
-
 sendNoticebody = {
     "target_type": "users",
     "target": [
@@ -167,15 +122,13 @@ sendPushIgnSoundbody = {"target_type" : "users",
 }
 
 class TextMessage:
-    def __init__(self, headers, body, bodytwo,sendImagebody,sendAudiobody,sendVideobody,sendNoticebody,sendLocbody,
+    def __init__(self, headers, body, bodytwo,sendNoticebody,sendLocbody,
                  sendForceNotibody,sendPushTitlebody,sendIgnoreNotibody,sendPushBadgebody,sendPushIgnSoundbody,
                  PushNewTitlebody):
         self.headers = headers
         self.body = body
         self.bodytwo = bodytwo
-        self.sendImagebody = sendImagebody
-        self.sendAudiobody = sendAudiobody
-        self.sendVideobody = sendVideobody
+        #self.sendVideobody = sendVideobody
         self.sendNoticebody = sendNoticebody
         self.sendLocbody = sendLocbody
         self.sendForceNotibody = sendForceNotibody
@@ -191,8 +144,9 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.body), headers=self.headers)
             #print r.json()
+            #print "url is: %s,org is: %s,app is: %s" % (url,org,app)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -202,7 +156,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.bodytwo), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -212,36 +166,36 @@ class TextMessage:
         try:
             self.r = requests.get("%s/%s/%s/users/%s/contacts/users" %(url,org,app,user1), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
     @ornament
-    def sendImageMess(self):
+    def sendImageMess(self,sendImagebody):
         # send a Image messages to user
         try:
-            self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendImagebody), headers=self.headers)
+            self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(sendImagebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
     @ornament
-    def sendAudioMess(self):
+    def sendAudioMess(self,sendAudiobody):
         # send a audio messages to  user
         try:
-            self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendAudiobody), headers=self.headers)
+            self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(sendAudiobody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
     @ornament
-    def sendVideoMess(self):
+    def sendVideoMess(self,sendVideobody):
         try:
-            self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendVideobody), headers=self.headers)
+            self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(sendVideobody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -250,7 +204,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendNoticebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -259,7 +213,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendLocbody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -268,7 +222,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendForceNotibody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -277,7 +231,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendPushTitlebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -286,7 +240,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendIgnoreNotibody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -295,7 +249,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendPushBadgebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -304,7 +258,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendPushIgnSoundbody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: ", e
         else:
             return self.r
 
@@ -313,12 +267,66 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.PushNewTitlebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error ", e
         else:
             return self.r
 
-'''
-Upload Image File
-Upload Audio File
-Upload Video File
-'''
+    def uploadImage(self):
+        uploadHeader = {'restrict-access': 'true',
+                        'Authorization': "Bearer %s" % token}
+
+        file = {'file': ('scenery.png', open('scenery.png', 'rb'), 'image/jpeg')}
+        try:
+            self.r = requests.post("%s/%s/%s/chatfiles/" %(url,org,app), files=file, headers=uploadHeader)
+            data = self.r.json()
+            if self.r.status_code == 200:
+                print "image upload success"
+                imageurl = data['uri'] + '/' + data['entities'][0]['uuid']
+                print "image url is: ", imageurl
+                return self.r.status_code, imageurl
+            else:
+                print "upload images failed",self.r.status_code,self.r.content
+                return self.r.status_code,self.r.content
+        except requests.exceptions.ConnectionError,e:
+            print "Your url is error",e
+            return "Your url is error ",  e
+
+    def uploadAudio(self):
+        uploadHeader = {'restrict-access': 'true',
+                        'Authorization': "Bearer %s" % token}
+
+        file = {'file': ('111.mp3', open('111.mp3', 'rb'))}
+        try:
+            self.r = requests.post("%s/%s/%s/chatfiles/" %(url,org,app), files=file, headers=uploadHeader)
+            data = self.r.json()
+            if self.r.status_code == 200:
+                print "Audio upload success"
+                audiourl = data['uri'] + '/' + data['entities'][0]['uuid']
+                print "Audio url is: ", audiourl
+                return self.r.status_code, audiourl
+            else:
+                print "upload Audio failed",self.r.status_code,self.r.content
+                return self.r.status_code,self.r.content
+        except requests.exceptions.ConnectionError,e:
+            print "Your url is error",e
+            return "Your url is error ",  e
+    def uploadVideo(self):
+        uploadHeader = {'restrict-access': 'true',
+                        'Authorization': "Bearer %s" % token}
+
+        file = {'file': ('345.mp4', open('345.mp4', 'rb'))}
+        try:
+            self.r = requests.post("%s/%s/%s/chatfiles/" %(url,org,app), files=file, headers=uploadHeader)
+            data = self.r.json()
+            if self.r.status_code == 200:
+                print "video upload success"
+                videourl = data['uri'] + '/' + data['entities'][0]['uuid']
+                print "video url is: ", videourl
+                return self.r.status_code, videourl
+            else:
+                print "upload video failed",self.r.status_code,self.r.content
+                return self.r.status_code,self.r.content
+        except requests.exceptions.ConnectionError,e:
+            print "Your url is error",e
+            return "Your url is error ",  e
+
