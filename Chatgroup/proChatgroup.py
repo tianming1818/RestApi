@@ -109,6 +109,17 @@ class GroupsInfo:
             return self.r
 
     @ornament
+    def ShareFilelist(self):
+        # get group share files list
+        print "groupid is: ", groupid
+        try:
+            self.r = requests.get("%s/%s/%s/chatgroups/%s/share_files" % (url, org, app, groupid), headers=self.headers)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r
+
+    @ornament
     def getAdminlist(self):
         # get group admin list
         print "groupid is: ", groupid
@@ -123,13 +134,20 @@ class GroupsInfo:
 
 
 class OperateGroup:
-    def __init__(self,headers,CrePubGrpBody,multiMemBody,grpTransBody,modgrpBody,mulMemtoblackBody):
+    def __init__(self,headers,CrePubGrpBody,multiMemBody,grpTransBody,modgrpBody,mulMemtoblackBody,
+                 muteMemBody,addAdminBody,pubGrpVerifyBody,verifyBody,privateBody,privateAllowBody):
         self.headers = headers
         self.cpgbody = CrePubGrpBody
         self.multiMem = multiMemBody
         self.transbody = grpTransBody
         self.modifygrp = modgrpBody
         self.MemstoblkBody = mulMemtoblackBody
+        self.muteMemBody = muteMemBody
+        self.addAdminBody = addAdminBody
+        self.CPGVbody = pubGrpVerifyBody
+        self.verifyBody = verifyBody
+        self.privateBody = privateBody
+        self.privateAllowBody = privateAllowBody
 
     def CrePubGrp(self):
         try:
@@ -291,15 +309,92 @@ class OperateGroup:
         else:
             return self.r
 
+    @ornament
+    def MuteMember(self, groupid):
+        # mute member
+        print "groupid is: ", groupid
+        try:
+            self.r = requests.post(
+                "%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid),
+                data = json.dumps(self.muteMemBody),
+                headers=self.headers)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r
 
+    @ornament
+    def unMuteMember(self, groupid):
+        # unmute member
+        print "groupid is: ", groupid
+        try:
+            self.r = requests.delete(
+                "%s/%s/%s/chatgroups/%s/mute/%s" % (url, org, app, groupid,user3),
+                headers=self.headers)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r
 
+    @ornament
+    def addAdmin(self, groupid):
+        # add a  member to admin
+        print "groupid is: ", groupid
+        try:
+            self.r = requests.post(
+                "%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid),
+                data=json.dumps(self.addAdminBody),
+                headers=self.headers)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r
 
+    @ornament
+    def delAdmin(self, groupid):
+        # delete a member to admin
+        print "groupid is: ", groupid
+        try:
+            self.r = requests.delete(
+                "%s/%s/%s/chatgroups/%s/admin/%s" % (url, org, app, groupid,user1),
+                headers=self.headers)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r
 
-
-
-
-
-
+    @ornament
+    def ApplyJoinGrp(self, groupid):
+        # apply to join group
+        print "groupid is: ", groupid
+        try:
+            tkBody =  {
+                    "grant_type": "password",
+                    "username": user3,
+                    "password": "1"
+                    }
+            req = requests.post("%s/%s/%s/token" % (url, org, app), data=json.dumps(tkBody),
+                                headers={'Accept': 'application/json', 'Content-Type': 'application/json'})
+            if req.status_code == 200:
+                contents = json.loads(req.content)
+                usertokens = contents["access_token"]
+                expires_in = contents["expires_in"]
+                print "token is: ",usertokens
+                print "expires is: ", expires_in
+            else:
+                print "get user token api error"
+                print "status code is: ",req.status_code, req.content
+            global userheaders
+            userheaders = {'Accept': 'application/json',
+                       'Content-Type': 'application/json',
+                       'Authorization': "Bearer %s" % usertokens}
+            self.r = requests.post(
+                "%s/%s/%s/chatgroups/%s/apply" % (url, org, app, groupid),
+                headers=userheaders)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r
 
     @ornament
     def deleteGroup(self,groupid):
@@ -313,16 +408,85 @@ class OperateGroup:
             return self.r
 
 
+    def CrePubVerify(self):
+        try:
+            self.r = requests.post("%s/%s/%s/chatgroups" % (url, org, app),data=json.dumps(self.CPGVbody), headers=self.headers)
+            data = self.r.json()
+            if data['data']['groupid']:
+                global cPubVrfyGrpID
+                cPubVrfyGrpID = data['data']['groupid']
+                print "Create public need verify groups success, group id is: ",cPubVrfyGrpID
+                print json.dumps(data, sort_keys=True, indent=2)
+                return True,cPubVrfyGrpID
+            else:
+                print "Create public need verify groups Failed"
+                return False,None
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e,None
+        else:
+            return self.r,None
+
+    @ornament
+    def vefyAlyJoinGrp(self, groupid):
+        # verify apply join group
+        print "groupid is: ", groupid
+        try:
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/apply_verify" % (url, org, app, groupid),
+                                   data=json.dumps(self.verifyBody),
+                                   headers=self.headers)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r
+
+    def CrePrivateGrp(self):
+        try:
+            self.r = requests.post("%s/%s/%s/chatgroups" % (url, org, app),data=json.dumps(self.privateBody), headers=self.headers)
+            data = self.r.json()
+            if data['data']['groupid']:
+                global GroupID
+                GroupID = data['data']['groupid']
+                print "Create private groups success, group id is: ",GroupID
+                print json.dumps(data, sort_keys=True, indent=2)
+                return True,GroupID
+            else:
+                print "Create private groups Failed"
+                return False,None
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e,None
+        else:
+            return self.r,None
+
+    def CtePrivAllowGrp(self):
+        try:
+            self.r = requests.post("%s/%s/%s/chatgroups" % (url, org, app),data=json.dumps(self.privateAllowBody), headers=self.headers)
+            data = self.r.json()
+            if data['data']['groupid']:
+                global GroupID
+                GroupID = data['data']['groupid']
+                print "Create private allow Invite groups success, group id is: ",GroupID
+                print json.dumps(data, sort_keys=True, indent=2)
+                return True,GroupID
+            else:
+                print "Create private allow Invite groups Failed"
+                return False,None
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e,None
+        else:
+            return self.r,Nonev
+
+    @ornament
+    def LeaveGroup(self, groupid):
+        # leave the group
+        print "groupid is: ", groupid
+        try:
+            self.r = requests.delete("%s/%s/%s/chatgroups/%s/quit" % (url, org, app, groupid), headers=userheaders)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r
 
 
 
-
-
-    ''' 
-   get shared files list
-   set Max group count
-   get Max group count
-
-   '''
 
 

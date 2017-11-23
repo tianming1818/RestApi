@@ -16,7 +16,11 @@ user2 = "rest112"
 user3 = "rest113"
 user4 = "rest114"
 user5 = "rest115"
+
+userlist = [user1,user2,user3,user4,user5]
+
 messages = "message from automation rest test"
+
 
 
 #get before 3 days date
@@ -70,3 +74,13 @@ def ornament(func):
             return r.status_code
     return judge
 
+
+for myuser in userlist:
+    req = requests.get("%s/%s/%s/users/%s" % (url, org, app, myuser),headers=headers)
+    if req.status_code == 404:
+        CreateUserBody = {"username":myuser,"password":"1"}
+        r = requests.post("%s/%s/%s/users" % (url, org, app),
+                          data=json.dumps(CreateUserBody),
+                          headers=headers)
+    else:
+        pass
