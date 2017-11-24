@@ -58,7 +58,7 @@ class TestUserManage(unittest.TestCase):
         self.assertEqual(self.TUM.ResetPword(),200)
     def testModNickname_13(self):
         u'验证修改nickname'
-        self.assertEqual(self.TUM.ModifyNickname(),200)
+        self.assertTrue(self.TUM.ModifyNickname(),True)
     def testAddFriend_14(self):
         u'验证为用户添加一个好友'
         self.assertEqual(self.TUM.addFriends(user1,user2),200)

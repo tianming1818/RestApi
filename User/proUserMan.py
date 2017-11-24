@@ -165,17 +165,33 @@ class UserManage:
         else:
             return self.r
 
-    @ornament
+
     def ModifyNickname(self):
         # modify nickname for user
         try:
             self.r = requests.put("%s/%s/%s/users/%s" % (url, org, app, user5),
                                   data=json.dumps(self.nicknameBody),
                                   headers=self.headers)
-        except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            if self.r.status_code == 200:
+                data = self.r.json()
+                newname = data['entities'][0]['nickname']
+                print "new nice name is: ",newname
+                if newname and newname == self.nicknameBody["nickname"]:
+                    print "modify nickname success"
+                    print json.dumps(data, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "modify nickname failed"
+                    print json.dumps(data, sort_keys=True, indent=2)
+                    return False
+            else:
+                print "status code is %s, request error",self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                return False
+        except Exception,e:
+            print json.dumps(data, sort_keys=True, indent=2),e
+            return False
+
 
     @ornament
     def addFriends(self,user,friend):

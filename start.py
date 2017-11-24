@@ -25,42 +25,65 @@ from TestInspect.verifyNotifier import *
 if __name__ == "__main__":
     suite = unittest.TestSuite()
     try:
-        rest = {
-                TestMessageTestCase:["testTM_1","testSendtwo_2","getfriend_3","testUpImage_4","testsendImage_5","testUpAudio_6","testsendAudio_7",
+        rest = {}
+        key6 = TestMessageTestCase
+        value6 = ["testTM_1","testSendtwo_2","getfriend_3","testUpImage_4","testsendImage_5","testUpAudio_6","testsendAudio_7",
                                      "testUpVideo_8", "testsendVideo_9","testsendNotic_10","testsendLoc_11","testForceNotifi_12","testPushTitle_13",
-                                     "testIgnoreNotifi_14","testPushBadge_15","testPushIgSound_16","testPushNewTitle_17",
-                                     ],
-                TestCallbackTestCase:["testAddCB_1","QueryCBs_2","QueryCBDetail_3","ModifyCB_4","DeleteCB_5",
-                                      ],
-                TestCmdMessageGetInfo:["testCmdMess_1","testCmdStartDebug_2","testCmdStopDebug_3","testCmdUploadLog_4","testCmdChagServer_5",
+                                     "testIgnoreNotifi_14","testPushBadge_15","testPushIgSound_16","testPushNewTitle_17",]
+        if sys.argv[6] == "true":
+            rest[key6] = value6
+
+        key7 = TestCallbackTestCase
+        value7 = ["testAddCB_1","QueryCBs_2","QueryCBDetail_3","ModifyCB_4","DeleteCB_5",]
+        if sys.argv[7] == "true":
+            rest[key7] = value7
+
+        key8 = TestCmdMessageGetInfo
+        value8 = ["testCmdMess_1","testCmdStartDebug_2","testCmdStopDebug_3","testCmdUploadLog_4","testCmdChagServer_5",
                                     "testCmdChagAppkey_6","testgetUserHistory_7","testGetOfflineMessCout_8","testChkOffliMessStat_9",
-                                    "testSendBCMess_10",
-                                    ],
-                TestGetGroupsInfo:["testGetAllGroup_1","testGetLimitGroup_2","testGetPubGroups_3","testGetGroupDetail_4","testMultiGrpDetail_5",
-                                   "testGetGrpMember_6","testGetGrpBlkList_7","testJoinAllGrp_8","testMuteList_9","testShareFileList_10","testadminList_11",
-                                  ],
-                TestOperateGroup:["testPubGroup_1","testAddGrpMem_2","testMulGrpMem_3","testTrasnfer_4","testModiGrp_5","testDelGrpMem_6",
+                                    "testSendBCMess_10",]
+        if sys.argv[8] == "true":
+            rest[key8] = value8
+
+        key9 = TestGetGroupsInfo
+        value9 = ["testGetAllGroup_1","testGetLimitGroup_2","testGetPubGroups_3","testGetGroupDetail_4","testMultiGrpDetail_5",
+                                   "testGetGrpMember_6","testGetGrpBlkList_7","testJoinAllGrp_8","testMuteList_9","testShareFileList_10","testadminList_11",]
+        if sys.argv[9] == "true":
+            rest[key9] = value9
+
+        key10 = TestOperateGroup
+        value10 = ["testPubGroup_1","testAddGrpMem_2","testMulGrpMem_3","testTrasnfer_4","testModiGrp_5","testDelGrpMem_6",
                                   "testDelMultiMem_7","testMembertoBlack_8","testMulMemtoBlack_9","testRmBlkMem_10","testRmBlkMultiMem_11",
                                   "testSendGrpMess_12","testMuteMem_13","testunMuteMem_14","testAddAdmin_15","testDelAdmin_16","testApplyJoinGrp_17",
                                   "testDelGroup_18","testCrePubVerifyGrp_19","testVerifyAlyJoin_20","testCtePrivateGrp_21","testPriSendMess_22",
-                                  "testPriAllowInvite_23","testLeaveGroup_24",
-                                  ],
-                TestChatRoom:["testCteroom_1","testGetAllRoom_2","testModifyRoom_3","testRoomDetail_4","testInviteMem_5","testInvtMulMem_6",
+                                  "testPriAllowInvite_23","testLeaveGroup_24",]
+        if sys.argv[10] == "true":
+            rest[key10] = value10
+
+        key11 = TestChatRoom
+        value11 = ["testCteroom_1","testGetAllRoom_2","testModifyRoom_3","testRoomDetail_4","testInviteMem_5","testInvtMulMem_6",
                               "testKickMemRoom_7","testKickMulMem_8","testJoinAllRooms_9","testGetAllRobot_10","testSendMessRoom_11",
                               "testAddRoomAdmin_12","testgetAdminList_13","testRmRoomAdmin_14","testMuteMembet_15","testGetMuteList_16",
-                              "testRmMuteMember_17","testDelChatroom_18",
-                              ],
-                TestUserManage:["testClitSecret_1","testGetAdmToken_2","testUserToken_3","testGetAllUser_4","testCrteUser_5","testCteMulUser_6",
+                              "testRmMuteMember_17","testDelChatroom_18",]
+        if sys.argv[11] == "true":
+            rest[key11] = value11
+
+        key12 = TestUserManage
+        value12 = ["testClitSecret_1","testGetAdmToken_2","testUserToken_3","testGetAllUser_4","testCrteUser_5","testCteMulUser_6",
                                 "testGetUsrDetail_7","testMulUsrDetail_8","testChkOnlineStat_9","testDelUser_10",
-                                #"testDelMulUser_11",
+                                      #"testDelMulUser_11",
                                 "testResetPword_12","testModNickname_13","testAddFriend_14","testDelFriend_15","testGetFridList_16",
                                 "testMvToBlack_17","testGetBlackList_18","testRmBlkList_19","testDeactivUser_20","testActivUser_21",
-                                "testDsconnectUser_22",
-                                ],
-                TestNotifiers: ["testGetNotifier_1","testUpNotifiHuaW_2","testDelHuaWeiNoti_3","testUpXiaoMiNoti_4",
-                                "testDelXizoMiNotifi_5",
-                                ],
-                }
+                                "testDsconnectUser_22",]
+        if sys.argv[12] == "true":
+            rest[key12] = value12
+
+        key13 = TestNotifiers
+        value13= ["testGetNotifier_1","testUpNotifiHuaW_2","testDelHuaWeiNoti_3","testUpXiaoMiNoti_4",
+                                "testDelXizoMiNotifi_5",]
+        if sys.argv[13] == "true":
+            rest[key13] = value13
+
         for classes,methlist in rest.items():
             for methods in methlist:
                 suite.addTest(classes(methods))
