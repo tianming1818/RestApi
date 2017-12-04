@@ -17,7 +17,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/chatgroups" %(url,org,app), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -30,7 +30,7 @@ class GroupsInfo:
             data = self.r.json()
             groupid = data['data'][0]['groupid']
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
     @ornament
@@ -39,7 +39,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/publicchatgroups" %(url,org,app), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
     @ornament
@@ -49,7 +49,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s" %(url,org,app,groupid), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
     @ornament
@@ -62,7 +62,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s,%s,%s" %(url,org,app,groupid1,groupid2,groupid3), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
     @ornament
@@ -72,7 +72,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s/users" %(url,org,app,groupid), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
     @ornament
@@ -82,7 +82,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -93,7 +93,7 @@ class GroupsInfo:
             self.r = requests.get("%s/%s/%s/users/%s/joined_chatgroups" %(url, org, app, user1),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -104,7 +104,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid),headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -115,7 +115,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s/share_files" % (url, org, app, groupid), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -126,7 +126,7 @@ class GroupsInfo:
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -168,7 +168,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False,None
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e,None
+            print "Your url is error: %s" % e,None
             return False
 
 
@@ -190,7 +190,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
 
@@ -217,7 +217,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
 
@@ -241,7 +241,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False, None
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False,None
 
 
@@ -272,7 +272,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def delGrpMem(self, groupid):
@@ -303,7 +303,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def delMultiMem(self, groupid):
@@ -334,7 +334,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
 
     def MemToBlack(self, groupid):
         #move group member to black
@@ -361,7 +361,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def MultiMemToBlack(self, groupid):
@@ -391,7 +391,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def RmBlackMem(self, groupid):
@@ -413,7 +413,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def RmBlkMultiMem(self, groupid):
@@ -435,7 +435,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     @ornament
@@ -454,7 +454,7 @@ class OperateGroup:
             self.r = requests.post("%s/%s/%s/messages" %(url, org, app),data=json.dumps(sendmessBody),
                 headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -486,7 +486,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
 
     def unMuteMember(self, groupid):
         # unmute member
@@ -515,7 +515,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return True
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def addAdmin(self, groupid):
@@ -539,7 +539,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def delAdmin(self, groupid):
@@ -562,7 +562,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def ApplyJoinGrp(self, groupid):
@@ -609,7 +609,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def deleteGroup(self,groupid):
@@ -629,7 +629,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def CrePubVerify(self):
@@ -646,7 +646,7 @@ class OperateGroup:
                 print "Create public need verify groups Failed"
                 return False,None
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False,None
 
     def vefyAlyJoinGrp(self, groupid):
@@ -673,7 +673,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     def CrePrivateGrp(self):
@@ -690,7 +690,7 @@ class OperateGroup:
                 print "Create private groups Failed"
                 return False,None
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False,None
 
     def CtePrivAllowGrp(self):
@@ -707,7 +707,7 @@ class OperateGroup:
                 print "Create private allow Invite groups Failed"
                 return False,None
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False,None
 
     def LeaveGroup(self, groupid):
@@ -732,7 +732,7 @@ class OperateGroup:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
 

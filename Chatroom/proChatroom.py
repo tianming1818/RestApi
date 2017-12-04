@@ -31,7 +31,7 @@ class chatroom:
                 print "Create chat room Failed"
                 return False, None
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e, None
+            return "Your url is error: %s" % e, None
 
     @ornament
     def getAllRoom(self):
@@ -40,7 +40,7 @@ class chatroom:
             self.r = requests.get("%s/%s/%s/chatrooms" % (url, org, app),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -52,7 +52,7 @@ class chatroom:
                                   data=json.dumps(self.modifyBody),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -63,7 +63,7 @@ class chatroom:
             self.r = requests.get("%s/%s/%s/chatrooms/%s" % (url, org, app, roomid),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -74,7 +74,7 @@ class chatroom:
             self.r = requests.post("%s/%s/%s/chatrooms/%s/users/%s" % (url, org, app, roomid,userroom),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -86,7 +86,7 @@ class chatroom:
                                   data=json.dumps(self.MultiMemBody),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -97,7 +97,7 @@ class chatroom:
             self.r = requests.delete("%s/%s/%s/chatrooms/%s/users/%s" % (url, org, app, roomid, userroom),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -108,7 +108,7 @@ class chatroom:
             self.r = requests.delete("%s/%s/%s/chatrooms/%s/users/%s,%s" % (url, org, app, roomid,user3,user4),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -119,7 +119,7 @@ class chatroom:
             self.r = requests.get("%s/%s/%s/users/%s/joined_chatrooms" % (url, org, app, roomuser),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -130,7 +130,7 @@ class chatroom:
             self.r = requests.get("%s/%s/%s/robots" % (url, org, app),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -150,7 +150,7 @@ class chatroom:
                                    data=json.dumps(sendMessRoom),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -163,7 +163,7 @@ class chatroom:
                                    data=json.dumps(AddAdminBody),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -174,7 +174,7 @@ class chatroom:
             self.r = requests.get("%s/%s/%s/chatrooms/%s/admin" % (url, org, app, roomid),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -185,7 +185,7 @@ class chatroom:
             self.r = requests.delete("%s/%s/%s/chatrooms/%s/admin/%s" % (url, org, app, roomid,roomuser),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -198,7 +198,7 @@ class chatroom:
                                      data=json.dumps(MuteMemBody),
                                      headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -209,7 +209,7 @@ class chatroom:
             self.r = requests.get("%s/%s/%s/chatrooms/%s/mute" % (url, org, app, roomid),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -220,7 +220,7 @@ class chatroom:
             self.r = requests.delete("%s/%s/%s/chatrooms/%s/mute/%s" % (url, org, app, roomid, roomuser),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -231,6 +231,6 @@ class chatroom:
             self.r = requests.delete("%s/%s/%s/chatrooms/%s" % (url, org, app, roomid),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r

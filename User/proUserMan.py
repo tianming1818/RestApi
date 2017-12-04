@@ -4,6 +4,7 @@ import sys
 sys.path.append("..")
 
 from apiconfig import *
+from User.userbody import *
 import requests
 import json
 
@@ -32,10 +33,9 @@ class UserManage:
             else:
                 print "Get client secret Failed"
                 return False, None, None
-        except (getClitSecret,requests.exceptions.ConnectionError), e:
+        except (KeyError,requests.exceptions.ConnectionError), e:
             return "Your url error or response result no json: " % e, None, None
 
-    @ornament
     def getAdminToken(self, client_id,client_secret):
         # get admin token
         admTokenBody = {
@@ -47,22 +47,37 @@ class UserManage:
             self.r = requests.post("%s/%s/%s/token" % (url, org, app),
                                    data=json.dumps(admTokenBody),
                                    headers={'Content-Type': 'application/json'})
+            data1 = self.r.json()
+            if data1["access_token"]:
+                print "get admin token success"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "get admin token failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return True
 
-    @ornament
     def getUserToken(self):
         # get user token
         try:
             self.r = requests.post("%s/%s/%s/token" % (url, org, app),
                                    data=json.dumps(self.userToken),
                                    headers=self.headers)
+            data1 = self.r.json()
+            if data1["access_token"]:
+                print "get user token success"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "get user token failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
     @ornament
     def getAllUser(self):
@@ -71,7 +86,7 @@ class UserManage:
             self.r = requests.get("%s/%s/%s/users" % (url, org, app),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -83,30 +98,44 @@ class UserManage:
                                   data=json.dumps(self.cteUserBody),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
-    @ornament
     def CrteMulieUser(self):
         # create multi users
         try:
             self.r = requests.post("%s/%s/%s/users" % (url, org, app),
                                    data=json.dumps(self.cteMultiUsrBody),
                                    headers=self.headers)
+            data1 = self.r.json()
+            get1 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user7),
+                                  headers=self.headers)
+
+            get2 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user8),
+                               headers=self.headers)
+            get3 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user9),
+                                headers=self.headers)
+            if get1.status_code == 200 and get2.status_code == 200 and get3.status_code == 200:
+                print "create multi user success"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "create multi user failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
     @ornament
     def getUserDetail(self):
         # get a user details
         try:
-            self.r = requests.get("%s/%s/%s/users/%s" % (url, org, app,user5),
+            self.r = requests.get("%s/%s/%s/users/%s" % (url, org, app, user6),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -117,7 +146,7 @@ class UserManage:
             self.r = requests.get("%s/%s/%s/users?limit=30" % (url, org, app),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -128,20 +157,29 @@ class UserManage:
             self.r = requests.get("%s/%s/%s/users/%s/status" % (url, org, app, user1),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
-    @ornament
     def deleteUser(self,user):
         # delete a user
         try:
             self.r = requests.delete("%s/%s/%s/users/%s" % (url, org, app, user),
                                   headers=self.headers)
+            data1 = self.r.json()
+            get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
+                                headers=self.headers)
+            if get.status_code == 404:
+                print "delete user %s success" % user
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "delete user %s failed" % user
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
     @ornament
     def delMultiUser(self):
@@ -150,7 +188,7 @@ class UserManage:
             self.r = requests.delete("%s/%s/%s/users?limit=5" % (url, org, app),
                                      headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -162,7 +200,7 @@ class UserManage:
                                   data=json.dumps(self.setPWordBody),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -193,39 +231,65 @@ class UserManage:
             print "response result no json",json.dumps(data, sort_keys=True, indent=2),e
             return False
 
-
-    @ornament
     def addFriends(self,user,friend):
         # add friend for user
         try:
             self.r = requests.post("%s/%s/%s/users/%s/contacts/users/%s" % (url, org, app, user,friend),
                                   headers=self.headers)
+            data1 = self.r.json()
+            get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
+                                  headers=self.headers)
+            data2 = get.json()
+            if friend in data2["data"]:
+                print "user %s additional friend %s success" %(user,friend)
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "user %s additional friend %s failed" % (user, friend)
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
-    @ornament
     def delFriends(self, user, friend):
         # del friend for user
         try:
             self.r = requests.delete("%s/%s/%s/users/%s/contacts/users/%s" % (url, org, app, user, friend),
                                    headers=self.headers)
+            data1 = self.r.json()
+            get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
+                               headers=self.headers)
+            data2 = get.json()
+            if friend not in data2["data"]:
+                print "user %s delete friend %s success" % (user, friend)
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "user %s delete friend %s failed" % (user, friend)
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
-    @ornament
     def FriendsList(self, user):
         # get friend list
         try:
             self.r = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
                                      headers=self.headers)
+            data1 = self.r.json()
+            if data1["data"]:
+                print "get friend list success"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "get friend list failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
     @ornament
     def MvToBlack(self, user,friend):
@@ -236,53 +300,92 @@ class UserManage:
                                    data=json.dumps(MvblackBody),
                                   headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
-    @ornament
     def GetBlackList(self, user):
         # get user  black list
         try:
             self.r = requests.get("%s/%s/%s/users/%s/blocks/users" % (url, org, app, user),
                                    headers=self.headers)
+            data1 = self.r.json()
+            if data1["data"]:
+                print "%s add black user and get black user success" %user
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "%s add black user and get black user failed" % user
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
-    @ornament
     def RmBlkList(self, user,blackuser):
         # remove friend from black list
         try:
             self.r = requests.delete("%s/%s/%s/users/%s/blocks/users/%s" % (url, org, app, user,blackuser),
                                   headers=self.headers)
+            data1 = self.r.json()
+            get = requests.get("%s/%s/%s/users/%s/blocks/users" % (url, org, app, user),
+                                  headers=self.headers)
+            data2 = get.json()
+            if blackuser not in data2["data"]:
+                print "blackuser %s remove from black list success" %blackuser
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "blackuser %s remove from black list failed" % blackuser
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
-    @ornament
     def DeactivateUser(self, user):
         # Deactivate a User
         try:
             self.r = requests.post("%s/%s/%s/users/%s/deactivate" % (url, org, app, user),
                                   headers=self.headers)
+            data1 = self.r.json()
+            get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
+                                  headers=self.headers)
+            data2 = get.json()
+            activate = data2['entities'][0]['activated']
+            if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == False:
+                print "deactivate user %s success" % user
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "deactivate user %s failed" % user
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
-    @ornament
     def ActivateUser(self, user):
         # Activate a User
         try:
             self.r = requests.post("%s/%s/%s/users/%s/activate" % (url, org, app, user),
                                    headers=self.headers)
+            data1 = self.r.json()
+            get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
+                               headers=self.headers)
+            data2 = get.json()
+            activate = data2['entities'][0]['activated']
+            if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == True:
+                print "Activate user %s success" % user
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "Activate user %s failed" % user
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
     @ornament
     def DisconnectUser(self):
@@ -291,7 +394,7 @@ class UserManage:
             self.r = requests.get("%s/%s/%s/users/%s/disconnect" % (url, org, app, user1),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -303,6 +406,6 @@ class UserManage:
                                    data=json.dumps(self.MulUserStatBody),
                                    headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" %e
         else:
             return self.r

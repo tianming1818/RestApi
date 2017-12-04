@@ -98,7 +98,7 @@ class SendCmdGetInfo:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendCmdbody), headers=self.headers)
             #print r.json()
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -108,7 +108,7 @@ class SendCmdGetInfo:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendCmdStartDebugbody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -118,7 +118,7 @@ class SendCmdGetInfo:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendCmdStopDebugbody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -128,7 +128,7 @@ class SendCmdGetInfo:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendCmdUploadLogbody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -138,7 +138,7 @@ class SendCmdGetInfo:
         try:
             self.r = requests.post("%s/%s/%s/messages" % (url,org,app),data=json.dumps(self.sendCmdChagServerbody), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -148,7 +148,7 @@ class SendCmdGetInfo:
         try:
             self.r = requests.post("%s/%s/%s/messages" % (url,org,app),data=json.dumps(self.sendCmdChagAppkeyboey), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -159,7 +159,7 @@ class SendCmdGetInfo:
             #self.r = requests.get("%s/%s/%s/chatmessages?limit=100" % (url,org,app), headers=self.headers)
             self.r = requests.get("%s/%s/%s/chatmessages?ql=select+* order by timestamp desc" % (url, org, app), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -178,7 +178,7 @@ class SendCmdGetInfo:
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
-            print "Your url is error: " % e
+            print "Your url is error: %s" % e
             return False
 
     @ornament
@@ -187,7 +187,7 @@ class SendCmdGetInfo:
         try:
             self.r = requests.get("%s/%s/%s/users/%s/offline_msg_count" % (url,org,app,user2), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -197,7 +197,7 @@ class SendCmdGetInfo:
         try:
             self.r = requests.get("%s/%s/%s/users/%s/offline_msg_status/QYyWT-5-c9ff5" % (url,org,app,user1), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -209,6 +209,6 @@ class SendCmdGetInfo:
         try:
             self.r = requests.post("%s/%s/%s/fsmessages" % (url,org,app),data=json.dumps(self.sendBroadcastbody), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r

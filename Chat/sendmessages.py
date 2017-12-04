@@ -146,7 +146,7 @@ class TextMessage:
             #print r.json()
             #print "url is: %s,org is: %s,app is: %s" % (url,org,app)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -156,7 +156,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.bodytwo), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -166,7 +166,7 @@ class TextMessage:
         try:
             self.r = requests.get("%s/%s/%s/users/%s/contacts/users" %(url,org,app,user1), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -176,7 +176,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(sendImagebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -186,7 +186,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(sendAudiobody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -195,7 +195,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(sendVideobody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -204,7 +204,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendNoticebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -213,7 +213,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendLocbody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -222,7 +222,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendForceNotibody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -231,7 +231,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendPushTitlebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -240,7 +240,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendIgnoreNotibody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -249,7 +249,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendPushBadgebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -258,7 +258,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.sendPushIgnSoundbody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -267,7 +267,7 @@ class TextMessage:
         try:
             self.r = requests.post("%s/%s/%s/messages" %(url,org,app), data=json.dumps(self.PushNewTitlebody), headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error ", e
+            return "Your url is error: %s" %e
         else:
             return self.r
 
@@ -288,7 +288,7 @@ class TextMessage:
                 print "upload images failed",self.r.status_code,self.r.content
                 return self.r.status_code,self.r.content
         except requests.exceptions.ConnectionError,e:
-            print "Your url is error",e
+            print "Your url is error: %s" %e
             return "Your url is error ",  e
 
     def uploadAudio(self):

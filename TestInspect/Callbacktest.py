@@ -23,15 +23,16 @@ class TestCallbackTestCase(unittest.TestCase):
 
     def QueryCBDetail_3(self):
         u'''查询一个Callback祥情'''
-        self.assertEqual(self.CB.queryCBDetail(),200)
+        self.assertTrue(self.CB.queryCBDetail(), True)
 
     def ModifyCB_4(self):
         u'''修改一个Callback'''
-        self.assertEqual(self.CB.modifyCB(),200)
+        self.assertTrue(self.CB.modifyCB(), True)
 
     def DeleteCB_5(self):
         u'''删除一个Callback'''
-        self.assertEqual(self.CB.deleteCB(),200)
+        self.CB.deleteCB()
+        self.assertFalse(self.CB.queryCBDetail(), False)
 
     def tearDown(self):
         self.CB = None

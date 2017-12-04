@@ -12,16 +12,16 @@ CBName = "mycallback"
 
 addbody = {"name":CBName,
     "msgTypes":["chat","chat_offline"],
-    "hxSecret":"123456",
-    "secret":"654321",
+    "hxSecret":"40088182666",
+    "secret":"9582402158",
     "targetUrl":"http://121.41.60.67:8082/callback/",
     "status":1,
     "notifyUrl":"http://www.notify.com"}
 
-modifybody = {"name":"mycallback",
+modifybody = {"name":CBName,
     "msgTypes":["chat","chat_offline"],
-    "hxSecret":"123456",
-    "secret":"654321",
+    "hxSecret":"25257979",
+    "secret":"89895656",
     "targetUrl":"http://121.41.60.67:8082/callback/",
     "status":1,
     "notifyUrl":"http://www.notify.com"}
@@ -39,7 +39,7 @@ class HxCallback:
             self.r = requests.post("%s/%s/%s/callbacks" %(url,org,app), data=json.dumps(self.body), headers=self.headers)
             #print r.json()
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
@@ -48,33 +48,48 @@ class HxCallback:
         try:
             self.r = requests.get("%s/%s/%s/callbacks" %(url,org,app),headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
 
-    @ornament
     def queryCBDetail(self):
         try:
             self.r = requests.get("%s/%s/%s/callbacks/%s" %(url,org,app,CBName),headers=self.headers)
-        except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            data1 = self.r.json()
+            if data1["entities"][0]["name"] == CBName:
+                print "get create callback details success"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "get create callback details failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
+        except (KeyError,requests.exceptions.ConnectionError),e:
+            print "Your url is error or query callback failed: ", e
+            print json.dumps(data1, sort_keys=True, indent=2)
+            return False
 
-    @ornament
     def modifyCB(self):
         try:
             self.r = requests.put("%s/%s/%s/callbacks/%s" %(url,org,app,CBName),data=json.dumps(self.modifybody),headers=self.headers)
+            data1 = self.r.json()
+            if data1["entities"][0]["actionParams"]["hxSecret"] == modifybody["hxSecret"] and data1["entities"][0]["actionParams"]["secret"] ==modifybody["secret"]:
+                print "callback modify success"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "callback modify Failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
-        else:
-            return self.r
+            print "Your url is error: %s" % e
+            return False
 
     @ornament
     def deleteCB(self):
         try:
             self.r = requests.delete("%s/%s/%s/callbacks/%s" %(url,org,app,CBName),data=json.dumps(self.modifybody),headers=self.headers)
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: " % e
+            return "Your url is error: %s" % e
         else:
             return self.r
