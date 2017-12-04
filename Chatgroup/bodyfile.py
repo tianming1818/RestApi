@@ -13,7 +13,7 @@ CrePubGrpBody = {
     "maxusers":800,
     "approval":false,
     "owner":user1,
-    "members":[user2]
+    "members":[user2,user88]
 }
 
 multiMemBody = {"usernames":[user4,user5]}
@@ -21,9 +21,9 @@ multiMemBody = {"usernames":[user4,user5]}
 grpTransBody = {"newowner":user2}
 
 modgrpBody = {
-    "groupname":"group update",
+    "groupname":"new_group123",
     "description":"updategroupinfo",
-    "maxusers":300
+    "maxusers":185
 }
 
 mulMemtoblackBody = {"usernames":[user4,user5]}

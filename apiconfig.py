@@ -16,8 +16,9 @@ user2 = "rest112"
 user3 = "rest113"
 user4 = "rest114"
 user5 = "rest115"
+user88 = "rest188"
 
-userlist = [user1,user2,user3,user4,user5]
+userlist = [user1,user2,user3,user4,user5,user88]
 
 messages = "message from automation rest test"
 
@@ -66,8 +67,8 @@ def ornament(func):
             r = func(*args, **kwargs)
             data = r.json()
             print json.dumps(data, sort_keys=True, indent=2)
-        except TypeError, e:
-            return "your url is error: %s" % e
+        except (ValueError,TypeError), e:
+            return "your url error or resport result is not json: %s, status code is: %s" % (e,r.status_code)
         if r.status_code != 200:
             return r.status_code,r.content
         else:

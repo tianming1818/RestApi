@@ -61,36 +61,36 @@ class TestOperateGroup(unittest.TestCase):
         self.assertTrue(result,True)
     def testAddGrpMem_2(self):
         u'验证增加群成员'
-        self.assertEqual(self.OpG.groupAddMem(groupid),200)
+        self.assertTrue(self.OpG.groupAddMem(groupid),True)
     def testMulGrpMem_3(self):
         u'验证增加多个群成员'
-        self.assertEqual(self.OpG.GrpAddMulMem(groupid),200)
+        self.assertTrue(self.OpG.GrpAddMulMem(groupid),True)
     def testTrasnfer_4(self):
         u'验证群主转让'
-        self.assertEqual(self.OpG.GrpTransfer(groupid),200)
+        self.assertTrue(self.OpG.GrpTransfer(groupid),True)
     def testModiGrp_5(self):
         u'验证群组修改'
-        self.assertEqual(self.OpG.modifyGrp(groupid),200)
+        self.assertTrue(self.OpG.modifyGrp(groupid),True)
     def testDelGrpMem_6(self):
         u'验证删除一个群成员'
-        self.assertEqual(self.OpG.delGrpMem(groupid),200)
+        self.assertTrue(self.OpG.delGrpMem(groupid), True)
     def testDelMultiMem_7(self):
         u'验证删除多个群成员'
-        self.assertEqual(self.OpG.delMultiMem(groupid),200)
+        self.assertTrue(self.OpG.delMultiMem(groupid),True)
     def testMembertoBlack_8(self):
         u'验证将成员移入黑名单'
         self.OpG.groupAddMem(groupid)
         self.OpG.GrpAddMulMem(groupid)
-        self.assertEqual(self.OpG.MemToBlack(groupid),200)
+        self.assertTrue(self.OpG.MemToBlack(groupid), True)
     def testMulMemtoBlack_9(self):
         u'验证将多成员移入黑名单'
-        self.assertEqual(self.OpG.MultiMemToBlack(groupid),200)
+        self.assertTrue(self.OpG.MultiMemToBlack(groupid), True)
     def testRmBlkMem_10(self):
-        u'验证将好友从黑名单中移除'
-        self.assertEqual(self.OpG.RmBlackMem(groupid),200)
+        u'验证将成员从黑名单中移除'
+        self.assertTrue(self.OpG.RmBlackMem(groupid), True)
     def testRmBlkMultiMem_11(self):
         u'验证将多个成员从黑名单移除'
-        self.assertEqual(self.OpG.RmBlkMultiMem(groupid),200)
+        self.assertTrue(self.OpG.RmBlkMultiMem(groupid), True)
     def testSendGrpMess_12(self):
         u'验证发送群消息'
         self.OpG.groupAddMem(groupid)
@@ -98,23 +98,23 @@ class TestOperateGroup(unittest.TestCase):
         self.assertEqual(self.OpG.sendGrpMess(groupid),200)
     def testMuteMem_13(self):
         u'验证对群成员禁言'
-        self.assertEqual(self.OpG.MuteMember(groupid),200)
+        self.assertTrue(self.OpG.MuteMember(groupid), True)
     def testunMuteMem_14(self):
         u'验证对禁言成员解禁言'
-        self.assertEqual(self.OpG.unMuteMember(groupid),200)
+        self.assertTrue(self.OpG.unMuteMember(groupid), True)
     def testAddAdmin_15(self):
         u'验证增一个群管理员'
-        self.assertEqual(self.OpG.addAdmin(groupid),200)
+        self.assertTrue(self.OpG.addAdmin(groupid), True)
     def testDelAdmin_16(self):
         u'验证删除一个群管理员'
         self.OpG.delGrpMem(groupid)
-        self.assertEqual(self.OpG.delAdmin(groupid), 200)
+        self.assertTrue(self.OpG.delAdmin(groupid), True)
     def testApplyJoinGrp_17(self):
         u'验证申请加入群组'
-        self.assertEqual(self.OpG.ApplyJoinGrp(groupid),200)
+        self.assertTrue(self.OpG.ApplyJoinGrp(groupid), True)
     def testDelGroup_18(self):
         u'验证删除群组'
-        self.assertEqual(self.OpG.deleteGroup(groupid),200)
+        self.assertTrue(self.OpG.deleteGroup(groupid), True)
     def testCrePubVerifyGrp_19(self):
         u'验证创建需要审批的公开群'
         global PubVerifyID
@@ -123,7 +123,7 @@ class TestOperateGroup(unittest.TestCase):
         self.OpG.ApplyJoinGrp(PubVerifyID)
     def testVerifyAlyJoin_20(self):
         u'验证审批申请加入的公开群'
-        self.assertEqual(self.OpG.vefyAlyJoinGrp(PubVerifyID),200)
+        self.assertTrue(self.OpG.vefyAlyJoinGrp(PubVerifyID), True)
         self.OpG.deleteGroup(PubVerifyID)
     def testCtePrivateGrp_21(self):
         u'验证创建私有群'
@@ -137,14 +137,14 @@ class TestOperateGroup(unittest.TestCase):
         self.assertEqual(self.OpG.sendGrpMess(PrivateID), 200)
         self.OpG.deleteGroup(PrivateID)
     def testPriAllowInvite_23(self):
-        u'验证创建允许邀请的私有情'
+        u'验证创建允许邀请的私有群'
         global PriAllowInID
         result,PriAllowInID = self.OpG.CtePrivAllowGrp()
         self.assertTrue(result,True)
         self.OpG.groupAddMem(PriAllowInID)
     def testLeaveGroup_24(self):
         u'验证退出群组'
-        self.assertEqual(self.OpG.LeaveGroup(PriAllowInID),200)
+        self.assertTrue(self.OpG.LeaveGroup(PriAllowInID), True)
         self.OpG.deleteGroup(PriAllowInID)
 
 

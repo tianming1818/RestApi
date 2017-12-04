@@ -22,3 +22,5 @@ setPWordBody = {"newpassword" : "2"}
 
 nicknameBody = {"nickname": "new_name"}
 
+MulUserStatBody = {"usernames":[user1,user2,user3]}
+

@@ -11,7 +11,7 @@ from User.userbody import *
 
 class TestUserManage(unittest.TestCase):
     def setUp(self):
-        self.TUM = UserManage(headers,userToken,cteUserBody,cteMultiUsrBody,setPWordBody,nicknameBody)
+        self.TUM = UserManage(headers,userToken,cteUserBody,cteMultiUsrBody,setPWordBody,nicknameBody,MulUserStatBody)
     def testClitSecret_1(self):
         u'验证获取client secret'
         global client_id,client_secret
@@ -50,46 +50,52 @@ class TestUserManage(unittest.TestCase):
         self.TUM.deleteUser("rest120")
         self.TUM.deleteUser("rest121")
 
-    def testDelMulUser_11(self):
-        u'验证删除多个用户'
-        self.assertEqual(self.TUM.delMultiUser(),200)
-    def testResetPword_12(self):
+    #def testDelMulUser_11(self):
+    #    u'验证删除多个用户'
+    #    self.assertEqual(self.TUM.delMultiUser(),200)
+    def testResetPword_11(self):
         u'验证修改用户密码'
         self.assertEqual(self.TUM.ResetPword(),200)
-    def testModNickname_13(self):
+    def testModNickname_12(self):
         u'验证修改nickname'
         self.assertTrue(self.TUM.ModifyNickname(),True)
-    def testAddFriend_14(self):
+    def testAddFriend_13(self):
         u'验证为用户添加一个好友'
         self.assertEqual(self.TUM.addFriends(user1,user2),200)
         self.TUM.addFriends(user1, user3)
         self.TUM.addFriends(user1, user4)
         self.TUM.addFriends(user1, user5)
-    def testDelFriend_15(self):
+    def testDelFriend_14(self):
         u'验证删除用户的一个好友'
         self.assertEqual(self.TUM.delFriends(user1, user5),200)
-    def testGetFridList_16(self):
+    def testGetFridList_15(self):
         u'验证获取好友列表'
         self.assertEqual(self.TUM.FriendsList(user1),200)
-    def testMvToBlack_17(self):
+    def testMvToBlack_16(self):
         u'验证将好友移到黑名单'
         self.assertEqual(self.TUM.MvToBlack(user1,user2),200)
-    def testGetBlackList_18(self):
+    def testGetBlackList_17(self):
         u'验证获取黑名单列表'
         self.assertEqual(self.TUM.GetBlackList(user1),200)
-    def testRmBlkList_19(self):
+    def testRmBlkList_18(self):
         u'验证将好友从黑名单列表移除'
         self.assertEqual(self.TUM.RmBlkList(user1,user2),200)
-    def testDeactivUser_20(self):
+    def testDeactivUser_19(self):
         u'验证Deactivate用户'
         self.assertEqual(self.TUM.DeactivateUser(user1),200)
-    def testActivUser_21(self):
+    def testActivUser_20(self):
         u'验证Activate User'
         self.assertEqual(self.TUM.ActivateUser(user1),200)
-    def testDsconnectUser_22(self):
+    def testDsconnectUser_21(self):
         u'验证Disconnect User'
         self.assertEqual(self.TUM.DisconnectUser(),200)
+    def testMulUsrOnline_22(self):
+        u'验证多用户在线状态'
+        self.assertEqual(self.TUM.MulUserStatus(),200)
 
 
 
-
+class TestDelOperate(TestUserManage):
+    def testDelMulUser_1(self):
+        u'验证删除多个用户'
+        self.assertEqual(self.TUM.delMultiUser(),200)

@@ -8,13 +8,14 @@ import requests
 import json
 
 class UserManage:
-    def __init__(self,headers,userToken,cteUserBody,cteMultiUsrBody,setPWordBody,nicknameBody):
+    def __init__(self,headers,userToken,cteUserBody,cteMultiUsrBody,setPWordBody,nicknameBody,MulUserStatBody):
         self.headers = headers
         self.userToken = userToken
         self.cteUserBody = cteUserBody
         self.cteMultiUsrBody = cteMultiUsrBody
         self.setPWordBody = setPWordBody
         self.nicknameBody = nicknameBody
+        self.MulUserStatBody = MulUserStatBody
 
     def getClitSecret(self):
         # get client secret
@@ -31,8 +32,8 @@ class UserManage:
             else:
                 print "Get client secret Failed"
                 return False, None, None
-        except requests.exceptions.ConnectionError, e:
-            return "Your url is error: " % e, None, None
+        except (getClitSecret,requests.exceptions.ConnectionError), e:
+            return "Your url error or response result no json: " % e, None, None
 
     @ornament
     def getAdminToken(self, client_id,client_secret):
@@ -188,8 +189,8 @@ class UserManage:
                 print "status code is %s, request error",self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
-        except Exception,e:
-            print json.dumps(data, sort_keys=True, indent=2),e
+        except (ValueError,Exception),e:
+            print "response result no json",json.dumps(data, sort_keys=True, indent=2),e
             return False
 
 
@@ -294,3 +295,14 @@ class UserManage:
         else:
             return self.r
 
+    @ornament
+    def MulUserStatus(self):
+        # check multi user online status
+        try:
+            self.r = requests.post("%s/%s/%s/users/batch/status" % (url, org, app),
+                                   data=json.dumps(self.MulUserStatBody),
+                                   headers=self.headers)
+        except requests.exceptions.ConnectionError, e:
+            return "Your url is error: " % e
+        else:
+            return self.r

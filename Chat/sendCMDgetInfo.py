@@ -154,14 +154,32 @@ class SendCmdGetInfo:
 
     @ornament
     def getUserChatHistoryMess(self):
-        # get user chat history message
+        # get user chat history message in sandbox
         try:
-            self.r = requests.get("%s/%s/%s/chatmessages/%s" % (url,org,app,olddate), headers=self.headers)
+            #self.r = requests.get("%s/%s/%s/chatmessages?limit=100" % (url,org,app), headers=self.headers)
+            self.r = requests.get("%s/%s/%s/chatmessages?ql=select+* order by timestamp desc" % (url, org, app), headers=self.headers)
         except requests.exceptions.ConnectionError, e:
             return "Your url is error: " % e
         else:
             return self.r
 
+    def NewUserHistoryMess(self):
+        # get user chat history message in online
+        try:
+            self.r = requests.get("%s/%s/%s/chatmessages/%s" % (url, org, app, olddate), headers=self.headers)
+            data1 = self.r.json()
+            result = data1['data'][0]['url']
+            if result:
+                print "get history message success, url is: ", result
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "get history message failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
+        except requests.exceptions.ConnectionError, e:
+            print "Your url is error: " % e
+            return False
 
     @ornament
     def getOfflineMessCout(self):

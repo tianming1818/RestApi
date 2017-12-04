@@ -41,7 +41,7 @@ if __name__ == "__main__":
         key8 = TestCmdMessageGetInfo
         value8 = ["testCmdMess_1","testCmdStartDebug_2","testCmdStopDebug_3","testCmdUploadLog_4","testCmdChagServer_5",
                                     "testCmdChagAppkey_6","testgetUserHistory_7","testGetOfflineMessCout_8","testChkOffliMessStat_9",
-                                    "testSendBCMess_10",]
+                                    "testSendBCMess_10","testChatMessage_11"]
         if sys.argv[8] == "true":
             rest[key8] = value8
 
@@ -71,18 +71,22 @@ if __name__ == "__main__":
         key12 = TestUserManage
         value12 = ["testClitSecret_1","testGetAdmToken_2","testUserToken_3","testGetAllUser_4","testCrteUser_5","testCteMulUser_6",
                                 "testGetUsrDetail_7","testMulUsrDetail_8","testChkOnlineStat_9","testDelUser_10",
-                                      #"testDelMulUser_11",
-                                "testResetPword_12","testModNickname_13","testAddFriend_14","testDelFriend_15","testGetFridList_16",
-                                "testMvToBlack_17","testGetBlackList_18","testRmBlkList_19","testDeactivUser_20","testActivUser_21",
-                                "testDsconnectUser_22",]
+                                "testResetPword_11","testModNickname_12","testAddFriend_13","testDelFriend_14","testGetFridList_15",
+                                "testMvToBlack_16","testGetBlackList_17","testRmBlkList_18","testDeactivUser_19","testActivUser_20",
+                                "testDsconnectUser_21","testMulUsrOnline_22"]
         if sys.argv[12] == "true":
             rest[key12] = value12
 
         key13 = TestNotifiers
-        value13= ["testGetNotifier_1","testUpNotifiHuaW_2","testDelHuaWeiNoti_3","testUpXiaoMiNoti_4",
+        value13 = ["testGetNotifier_1","testUpNotifiHuaW_2","testDelHuaWeiNoti_3","testUpXiaoMiNoti_4",
                                 "testDelXizoMiNotifi_5",]
         if sys.argv[13] == "true":
             rest[key13] = value13
+
+        key14 = TestDelOperate
+        value14 = ["testDelMulUser_1",]
+        if sys.argv[14] == "true":
+            rest[key14] = value14
 
         for classes,methlist in rest.items():
             for methods in methlist:
