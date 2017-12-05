@@ -387,25 +387,46 @@ class UserManage:
             print "Your url is error: %s" %e
             return False
 
-    @ornament
     def DisconnectUser(self):
         # Disconnect User
         try:
             self.r = requests.get("%s/%s/%s/users/%s/disconnect" % (url, org, app, user1),
                                    headers=self.headers)
+            data1 = self.r.json()
+            get = requests.get("%s/%s/%s/users/%s/status" % (url, org, app, user1),
+                                  headers=self.headers)
+            data2 = get.json()
+            if data2["data"][user1]== 'offline':
+                print "Disconnect user %s success" %user1
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "Disconnect user %s failed" %user1
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: %s" %e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False
 
-    @ornament
     def MulUserStatus(self):
-        # check multi user online status
+        # check multi user online status    user1,user2,user3
         try:
             self.r = requests.post("%s/%s/%s/users/batch/status" % (url, org, app),
                                    data=json.dumps(self.MulUserStatBody),
                                    headers=self.headers)
+            data1 = self.r.json()
+            users = []
+            for a in data1['data']:
+                for x, y in a.items():
+                    users.append(x)
+            if user1 in users and user2 in users and user3 in users:
+                print "get multi users %s %s %s online status success" %(user1,user2,user3)
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "get multi users %s %s %s online status failed" % (user1, user2, user3)
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
-            return "Your url is error: %s" %e
-        else:
-            return self.r
+            print "Your url is error: %s" %e
+            return False

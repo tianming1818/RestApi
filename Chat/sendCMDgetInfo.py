@@ -177,8 +177,9 @@ class SendCmdGetInfo:
                 print "get history message failed"
                 print json.dumps(data1, sort_keys=True, indent=2)
                 return False
-        except requests.exceptions.ConnectionError, e:
-            print "Your url is error: %s" % e
+        except (KeyError,requests.exceptions.ConnectionError), e:
+            print "Your url is error or return result error: %s" % e
+            print json.dumps(data1, sort_keys=True, indent=2)
             return False
 
     @ornament

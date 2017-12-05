@@ -42,16 +42,25 @@ class GroupsInfo:
             return "Your url is error: %s" % e
         else:
             return self.r
-    @ornament
+
     def getGroupDetail(self):
         #get  Groups infomation
         print "groupid is: ",groupid
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s" %(url,org,app,groupid), headers=self.headers)
+            data1 = self.r.json()
+            if data1["data"][0]["owner"] and data1["data"][0]["id"] and data1["data"][0]["maxusers"]:
+                print "get group details success"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "get group details failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: %s" % e
-        else:
-            return self.r
+            print "Your url is error: %s" % e
+            return False
+
     @ornament
     def getMultiGrpDetail(self):
         #get multi Groups infomation
@@ -65,16 +74,25 @@ class GroupsInfo:
             return "Your url is error: %s" % e
         else:
             return self.r
-    @ornament
+
     def getGroupMember(self):
         #get Groups member
         print "groupid is: ",groupid
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s/users" %(url,org,app,groupid), headers=self.headers)
+            data1 = self.r.json()
+            if data1["data"]:
+                print "get group members success"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return True
+            else:
+                print "get group members failed"
+                print json.dumps(data1, sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError,e:
-            return "Your url is error: %s" % e
-        else:
-            return self.r
+            print "Your url is error: %s" % e
+            return False
+
     @ornament
     def getGrpBlacklit(self):
         # get Groups black list

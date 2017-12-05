@@ -24,13 +24,13 @@ class TestGetGroupsInfo(unittest.TestCase):
         self.assertEqual(self.GIF.getPublicGroups(),200)
     def testGetGroupDetail_4(self):
         u'''获取群组的详情'''
-        self.assertEqual(self.GIF.getGroupDetail(),200)
+        self.assertTrue(self.GIF.getGroupDetail(), True)
     def testMultiGrpDetail_5(self):
         u'''获取多个群组的详情'''
         self.assertEqual(self.GIF.getMultiGrpDetail(),200)
     def testGetGrpMember_6(self):
         u'''获取群组成员'''
-        self.assertEqual(self.GIF.getGroupMember(),200)
+        self.assertTrue(self.GIF.getGroupMember(), True)
     def testGetGrpBlkList_7(self):
         u'''获取群组黑名单列表'''
         self.assertEqual(self.GIF.getGrpBlacklit(),200)

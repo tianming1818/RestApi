@@ -85,10 +85,10 @@ class TestUserManage(unittest.TestCase):
         self.assertTrue(self.TUM.ActivateUser(user5), True)
     def testDsconnectUser_21(self):
         u'验证Disconnect User'
-        self.assertEqual(self.TUM.DisconnectUser(),200)
+        self.assertTrue(self.TUM.DisconnectUser(), True)
     def testMulUsrOnline_22(self):
         u'验证多用户在线状态'
-        self.assertEqual(self.TUM.MulUserStatus(),200)
+        self.assertTrue(self.TUM.MulUserStatus(), True)
 
 
 
