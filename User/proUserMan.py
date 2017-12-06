@@ -23,16 +23,21 @@ class UserManage:
         try:
             self.r = requests.get("%s/%s/%s/credentials" % (url, org, app),
                                   headers=self.headers)
-            data = self.r.json()
-            if data['credentials']['client_id']:
-                client_id = data['credentials']['client_id']
-                client_secret = data['credentials']['client_secret']
-                print "Get client secret success, client_id is: %s, client_secret is: %s" %(client_id,client_secret)
-                print json.dumps(data, sort_keys=True, indent=2)
-                return True, client_id,client_secret
+            if self.r.status_code == 200:
+                data = self.r.json()
+                if data['credentials']['client_id']:
+                    client_id = data['credentials']['client_id']
+                    client_secret = data['credentials']['client_secret']
+                    print "Get client secret success, client_id is: %s, client_secret is: %s" %(client_id,client_secret)
+                    print json.dumps(data, sort_keys=True, indent=2)
+                    return True, client_id,client_secret
+                else:
+                    print "Get client secret Failed"
+                    return False, None, None
             else:
-                print "Get client secret Failed"
-                return False, None, None
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                return False
         except (KeyError,requests.exceptions.ConnectionError), e:
             return "Your url error or response result no json: " % e, None, None
 
@@ -47,14 +52,19 @@ class UserManage:
             self.r = requests.post("%s/%s/%s/token" % (url, org, app),
                                    data=json.dumps(admTokenBody),
                                    headers={'Content-Type': 'application/json'})
-            data1 = self.r.json()
-            if data1["access_token"]:
-                print "get admin token success"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                if data1["access_token"]:
+                    print "get admin token success"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "get admin token failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "get admin token failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -66,14 +76,19 @@ class UserManage:
             self.r = requests.post("%s/%s/%s/token" % (url, org, app),
                                    data=json.dumps(self.userToken),
                                    headers=self.headers)
-            data1 = self.r.json()
-            if data1["access_token"]:
-                print "get user token success"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                if data1["access_token"]:
+                    print "get user token success"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "get user token failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "get user token failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -108,21 +123,26 @@ class UserManage:
             self.r = requests.post("%s/%s/%s/users" % (url, org, app),
                                    data=json.dumps(self.cteMultiUsrBody),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get1 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user7),
-                                  headers=self.headers)
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get1 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user7),
+                                      headers=self.headers)
 
-            get2 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user8),
-                               headers=self.headers)
-            get3 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user9),
-                                headers=self.headers)
-            if get1.status_code == 200 and get2.status_code == 200 and get3.status_code == 200:
-                print "create multi user success"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+                get2 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user8),
+                                   headers=self.headers)
+                get3 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user9),
+                                    headers=self.headers)
+                if get1.status_code == 200 and get2.status_code == 200 and get3.status_code == 200:
+                    print "create multi user success"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "create multi user failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "create multi user failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -166,16 +186,21 @@ class UserManage:
         try:
             self.r = requests.delete("%s/%s/%s/users/%s" % (url, org, app, user),
                                   headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
-                                headers=self.headers)
-            if get.status_code == 404:
-                print "delete user %s success" % user
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
+                                    headers=self.headers)
+                if get.status_code == 404:
+                    print "delete user %s success" % user
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "delete user %s failed" % user
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "delete user %s failed" % user
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -236,17 +261,22 @@ class UserManage:
         try:
             self.r = requests.post("%s/%s/%s/users/%s/contacts/users/%s" % (url, org, app, user,friend),
                                   headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
-                                  headers=self.headers)
-            data2 = get.json()
-            if friend in data2["data"]:
-                print "user %s additional friend %s success" %(user,friend)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
+                                      headers=self.headers)
+                data2 = get.json()
+                if friend in data2["data"]:
+                    print "user %s additional friend %s success" %(user,friend)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "user %s additional friend %s failed" % (user, friend)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "user %s additional friend %s failed" % (user, friend)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -257,17 +287,22 @@ class UserManage:
         try:
             self.r = requests.delete("%s/%s/%s/users/%s/contacts/users/%s" % (url, org, app, user, friend),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
-                               headers=self.headers)
-            data2 = get.json()
-            if friend not in data2["data"]:
-                print "user %s delete friend %s success" % (user, friend)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
+                                   headers=self.headers)
+                data2 = get.json()
+                if friend not in data2["data"]:
+                    print "user %s delete friend %s success" % (user, friend)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "user %s delete friend %s failed" % (user, friend)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "user %s delete friend %s failed" % (user, friend)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -278,14 +313,19 @@ class UserManage:
         try:
             self.r = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
                                      headers=self.headers)
-            data1 = self.r.json()
-            if data1["data"]:
-                print "get friend list success"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                if data1["data"]:
+                    print "get friend list success"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "get friend list failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "get friend list failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -309,14 +349,19 @@ class UserManage:
         try:
             self.r = requests.get("%s/%s/%s/users/%s/blocks/users" % (url, org, app, user),
                                    headers=self.headers)
-            data1 = self.r.json()
-            if data1["data"]:
-                print "%s add black user and get black user success" %user
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                if data1["data"]:
+                    print "%s add black user and get black user success" %user
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "%s add black user and get black user failed" % user
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "%s add black user and get black user failed" % user
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -327,17 +372,22 @@ class UserManage:
         try:
             self.r = requests.delete("%s/%s/%s/users/%s/blocks/users/%s" % (url, org, app, user,blackuser),
                                   headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/users/%s/blocks/users" % (url, org, app, user),
-                                  headers=self.headers)
-            data2 = get.json()
-            if blackuser not in data2["data"]:
-                print "blackuser %s remove from black list success" %blackuser
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/users/%s/blocks/users" % (url, org, app, user),
+                                      headers=self.headers)
+                data2 = get.json()
+                if blackuser not in data2["data"]:
+                    print "blackuser %s remove from black list success" %blackuser
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "blackuser %s remove from black list failed" % blackuser
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "blackuser %s remove from black list failed" % blackuser
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -348,18 +398,22 @@ class UserManage:
         try:
             self.r = requests.post("%s/%s/%s/users/%s/deactivate" % (url, org, app, user),
                                   headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
-                                  headers=self.headers)
-            data2 = get.json()
-            activate = data2['entities'][0]['activated']
-            if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == False:
-                print "deactivate user %s success" % user
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
+                                      headers=self.headers)
+                data2 = get.json()
+                if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == False:
+                    print "deactivate user %s success" % user
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "deactivate user %s failed" % user
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "deactivate user %s failed" % user
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -370,18 +424,23 @@ class UserManage:
         try:
             self.r = requests.post("%s/%s/%s/users/%s/activate" % (url, org, app, user),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
-                               headers=self.headers)
-            data2 = get.json()
-            activate = data2['entities'][0]['activated']
-            if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == True:
-                print "Activate user %s success" % user
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
+                                   headers=self.headers)
+                data2 = get.json()
+                activate = data2['entities'][0]['activated']
+                if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == True:
+                    print "Activate user %s success" % user
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "Activate user %s failed" % user
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "Activate user %s failed" % user
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
@@ -392,40 +451,50 @@ class UserManage:
         try:
             self.r = requests.get("%s/%s/%s/users/%s/disconnect" % (url, org, app, user1),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/users/%s/status" % (url, org, app, user1),
-                                  headers=self.headers)
-            data2 = get.json()
-            if data2["data"][user1]== 'offline':
-                print "Disconnect user %s success" %user1
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/users/%s/status" % (url, org, app, user1),
+                                      headers=self.headers)
+                data2 = get.json()
+                if data2["data"][user1]== 'offline':
+                    print "Disconnect user %s success" %user1
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "Disconnect user %s failed" %user1
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "Disconnect user %s failed" %user1
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
             return False
 
     def MulUserStatus(self):
-        # check multi user online status    user1,user2,user3
+        # check multi user online status
         try:
             self.r = requests.post("%s/%s/%s/users/batch/status" % (url, org, app),
                                    data=json.dumps(self.MulUserStatBody),
                                    headers=self.headers)
-            data1 = self.r.json()
-            users = []
-            for a in data1['data']:
-                for x, y in a.items():
-                    users.append(x)
-            if user1 in users and user2 in users and user3 in users:
-                print "get multi users %s %s %s online status success" %(user1,user2,user3)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                users = []
+                for a in data1['data']:
+                    for x, y in a.items():
+                        users.append(x)
+                if user1 in users and user2 in users and user3 in users:
+                    print "get multi users %s %s %s online status success" %(user1,user2,user3)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "get multi users %s %s %s online status failed" % (user1, user2, user3)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "get multi users %s %s %s online status failed" % (user1, user2, user3)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error", self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" %e
