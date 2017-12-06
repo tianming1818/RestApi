@@ -48,14 +48,19 @@ class GroupsInfo:
         print "groupid is: ",groupid
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s" %(url,org,app,groupid), headers=self.headers)
-            data1 = self.r.json()
-            if data1["data"][0]["owner"] and data1["data"][0]["id"] and data1["data"][0]["maxusers"]:
-                print "get group details success"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                if data1["data"][0]["owner"] and data1["data"][0]["id"] and data1["data"][0]["maxusers"]:
+                    print "get group details success"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "get group details failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "get group details failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError,e:
             print "Your url is error: %s" % e
@@ -80,14 +85,19 @@ class GroupsInfo:
         print "groupid is: ",groupid
         try:
             self.r = requests.get("%s/%s/%s/chatgroups/%s/users" %(url,org,app,groupid), headers=self.headers)
-            data1 = self.r.json()
-            if data1["data"]:
-                print "get group members success"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                if data1["data"]:
+                    print "get group members success"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "get group members failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "get group members failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError,e:
             print "Your url is error: %s" % e
@@ -170,21 +180,26 @@ class OperateGroup:
     def CrePubGrp(self):
         try:
             self.r = requests.post("%s/%s/%s/chatgroups" % (url, org, app),data=json.dumps(self.cpgbody), headers=self.headers)
-            data1 = self.r.json()
-            global groupid
-            groupid = data1['data']['groupid']
-            #get group all members api
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            owners = data2["data"][-1]["owner"]
-            if owners == user1:
-                print "Create public groups success, group id is: ",groupid
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True,groupid
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                global groupid
+                groupid = data1['data']['groupid']
+                #get group all members api
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                owners = data2["data"][-1]["owner"]
+                if owners == user1:
+                    print "Create public groups success, group id is: ",groupid
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True,groupid
+                else:
+                    print "Create public groups Failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False,None
             else:
-                print "Create public groups Failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return False,None
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e,None
             return False
@@ -195,17 +210,22 @@ class OperateGroup:
         print "groupid is: ", groupid
         try:
             self.r = requests.post("%s/%s/%s/chatgroups/%s/users/%s" % (url, org, app, groupid,user3), headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            members = data2["data"][0]["member"]
-            if members == user3:
-                print "add group member %s success, group all member is: %s" %(user3,data2["data"])
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                members = data2["data"][0]["member"]
+                if members == user3:
+                    print "add group member %s success, group all member is: %s" %(user3,data2["data"])
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "add group member %s failed, group all member is: %s" %(user3,data2["data"])
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "add group member %s failed, group all member is: %s" %(user3,data2["data"])
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -218,21 +238,26 @@ class OperateGroup:
         try:
             self.r = requests.post("%s/%s/%s/chatgroups/%s/users/" % (url, org, app, groupid),data=json.dumps(self.multiMem),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            newmember = []
-            mem1 = data2["data"][0]["member"]
-            mem2 = data2["data"][1]["member"]
-            newmember.append(mem1)
-            newmember.append(mem2)
-            if user4 in newmember and user5 in newmember:
-                print "add group multe members %s %s success, group all member is: %s" %(user4,user5,data2["data"])
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                newmember = []
+                mem1 = data2["data"][0]["member"]
+                mem2 = data2["data"][1]["member"]
+                newmember.append(mem1)
+                newmember.append(mem2)
+                if user4 in newmember and user5 in newmember:
+                    print "add group multe members %s %s success, group all member is: %s" %(user4,user5,data2["data"])
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "add group multe members %s %s failed, group all member is: %s" %(user4,user5,data2["data"])
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "add group multe members %s %s failed, group all member is: %s" %(user4,user5,data2["data"])
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -246,18 +271,23 @@ class OperateGroup:
             self.r = requests.put("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid),
                                    data=json.dumps(self.transbody),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            newowner = data2["data"][-2]["owner"]
-            if newowner == user2:
-                print "Transfer groups new owner %s success, group members: %s" %(user2,data2["data"])
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True, groupid
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                newowner = data2["data"][-2]["owner"]
+                if newowner == user2:
+                    print "Transfer groups new owner %s success, group members: %s" %(user2,data2["data"])
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True, groupid
+                else:
+                    print "Transfer groups new owner %s Failed, group members: %s" %(user2,data2["data"])
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False, None
             else:
-                print "Transfer groups new owner %s Failed, group members: %s" %(user2,data2["data"])
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return False, None
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
             return False,None
@@ -275,19 +305,24 @@ class OperateGroup:
             self.r = requests.put("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid),
                                   data=json.dumps(self.modifygrp),
                                   headers=self.headers)
-            data1 = self.r.json()
-            # group details api
-            get = requests.get("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            newmaxuser = data2['data'][0]['maxusers']
-            newname = data2['data'][0]['name']
-            if newmaxuser == self.modifygrp["maxusers"] and newname == self.modifygrp["groupname"]:
-                print "Modify groups infomation success, group maxuser old is: %s, new is: %s; groupname old is: %s, new is: %s" % (oldmaxuser,newmaxuser,oldname,newname)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                # group details api
+                get = requests.get("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                newmaxuser = data2['data'][0]['maxusers']
+                newname = data2['data'][0]['name']
+                if newmaxuser == self.modifygrp["maxusers"] and newname == self.modifygrp["groupname"]:
+                    print "Modify groups infomation success, group maxuser old is: %s, new is: %s; groupname old is: %s, new is: %s" % (oldmaxuser,newmaxuser,oldname,newname)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "Modify groups infomation failed, group maxuser old is: %s, new is: %s; groupname old is: %s, new is: %s" % (oldmaxuser,newmaxuser,oldname,newname)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "Modify groups infomation failed, group maxuser old is: %s, new is: %s; groupname old is: %s, new is: %s" % (oldmaxuser,newmaxuser,oldname,newname)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -305,20 +340,25 @@ class OperateGroup:
                     oldmember.append(y)
             self.r = requests.delete("%s/%s/%s/chatgroups/%s/users/%s" % (url, org, app, groupid, user3),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            newmember = []
-            for a in data2['data']:
-                for x, y in a.items():
-                    newmember.append(y)
-            if user3 in oldmember and user3 not in newmember:
-                print "delete group member %s success, now members list is: %s" %(user3,newmember)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                newmember = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        newmember.append(y)
+                if user3 in oldmember and user3 not in newmember:
+                    print "delete group member %s success, now members list is: %s" %(user3,newmember)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "delete group member %s failed, now members list is: %s" %(user3,newmember)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "delete group member %s failed, now members list is: %s" %(user3,newmember)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -336,20 +376,25 @@ class OperateGroup:
                     oldmember.append(y)
             self.r = requests.delete("%s/%s/%s/chatgroups/%s/users/%s,%s" % (url, org, app, groupid, user4,user5),
                                      headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            newmember = []
-            for a in data2['data']:
-                for x, y in a.items():
-                    newmember.append(y)
-            if user4 not in newmember and user5 not in newmember:
-                print "delete group multi member %s %s success, now members list is: %s" %(user4,user5,newmember)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                newmember = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        newmember.append(y)
+                if user4 not in newmember and user5 not in newmember:
+                    print "delete group multi member %s %s success, now members list is: %s" %(user4,user5,newmember)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "delete group multi member %s %s failed, now members list is: %s" %(user4,user5,newmember)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "delete group multi member %s %s failed, now members list is: %s" %(user4,user5,newmember)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             return "Your url is error: %s" % e
@@ -360,23 +405,28 @@ class OperateGroup:
         try:
             self.r = requests.post("%s/%s/%s/chatgroups/%s/blocks/users/%s" % (url, org, app, groupid, user3),
                                      headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            nowmember = []
-            for a in data2['data']:
-                for x, y in a.items():
-                    nowmember.append(y)
-            get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
-            data3 = get.json()
-            blacklist = data3['data']
-            if user3 in blacklist and user3 not in nowmember:
-                print "move %s to black success, now member is: %s" %(user3,nowmember)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                nowmember = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        nowmember.append(y)
+                get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
+                data3 = get.json()
+                blacklist = data3['data']
+                if user3 in blacklist and user3 not in nowmember:
+                    print "move %s to black success, now member is: %s" %(user3,nowmember)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "move %s to black failed, now member is: %s" % (user3, nowmember)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "move %s to black failed, now member is: %s" % (user3, nowmember)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -389,24 +439,29 @@ class OperateGroup:
             self.r = requests.post("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid),
                                    data=json.dumps(self.MemstoblkBody),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            nowmember = []
-            for a in data2['data']:
-                for x, y in a.items():
-                    nowmember.append(y)
-            get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
-            data3 = get.json()
-            blacklist = data3['data']
-            print "black list is: ",blacklist
-            if user4 in blacklist and user4 not in nowmember and user5 in blacklist and user5 not in nowmember:
-                print "move %s and %s to black success, now member is: %s" % (user4,user5, nowmember)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                nowmember = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        nowmember.append(y)
+                get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
+                data3 = get.json()
+                blacklist = data3['data']
+                print "black list is: ",blacklist
+                if user4 in blacklist and user4 not in nowmember and user5 in blacklist and user5 not in nowmember:
+                    print "move %s and %s to black success, now member is: %s" % (user4,user5, nowmember)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "move %s and %s to black failed, now member is: %s" % (user4,user5, nowmember)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "move %s and %s to black failed, now member is: %s" % (user4,user5, nowmember)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -418,17 +473,22 @@ class OperateGroup:
         try:
             self.r = requests.delete("%s/%s/%s/chatgroups/%s/blocks/users/%s" % (url, org, app, groupid, user3),
                                      headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            blacklist = data2['data']
-            if user3 not in blacklist:
-                print "remove %s member from blacklist success, now blacklist is: %s" % (user3, blacklist)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                blacklist = data2['data']
+                if user3 not in blacklist:
+                    print "remove %s member from blacklist success, now blacklist is: %s" % (user3, blacklist)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "remove %s member from blacklist failed, now blacklist is: %s" % (user3, blacklist)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "remove %s member from blacklist failed, now blacklist is: %s" % (user3, blacklist)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -440,17 +500,22 @@ class OperateGroup:
         try:
             self.r = requests.delete("%s/%s/%s/chatgroups/%s/blocks/users/%s,%s" % (url, org, app, groupid, user4,user5),
                                      headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            blacklist = data2['data']
-            if user4 not in blacklist and user5 not in blacklist:
-                print "remove %s %s members from blacklist success, now blacklist is: %s" % (user4,user5, blacklist)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                blacklist = data2['data']
+                if user4 not in blacklist and user5 not in blacklist:
+                    print "remove %s %s members from blacklist success, now blacklist is: %s" % (user4,user5, blacklist)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "remove %s %s members from blacklist failed, now blacklist is: %s" % (user4,user5, blacklist)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "remove %s %s members from blacklist failed, now blacklist is: %s" % (user4,user5, blacklist)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -480,28 +545,31 @@ class OperateGroup:
         # mute member
         print "groupid is: ", groupid
         try:
-            self.r = requests.post(
-                "%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid),
-                data = json.dumps(self.muteMemBody),
-                headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            mutelist = []
-            if data2['data']:
-                for a in data2['data']:
-                    mutelist.append(a['user'])
-                if user3 in mutelist:
-                    print "mute user %s success, mute list is: %s" %(user3,mutelist)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid),data = json.dumps(self.muteMemBody),
+                                    headers=self.headers)
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                mutelist = []
+                if data2['data']:
+                    for a in data2['data']:
+                        mutelist.append(a['user'])
+                    if user3 in mutelist:
+                        print "mute user %s success, mute list is: %s" %(user3,mutelist)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "mute user %s failed" % user3
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
                     print "mute user %s failed" % user3
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "mute user %s failed" % user3
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             return "Your url is error: %s" % e
@@ -510,28 +578,32 @@ class OperateGroup:
         # unmute member
         print "groupid is: ", groupid
         try:
-            self.r = requests.delete(
-                "%s/%s/%s/chatgroups/%s/mute/%s" % (url, org, app, groupid,user3),
-                headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            mutelist = []
-            if data2['data']:
-                for a in data2['data']:
-                    mutelist.append(a['user'])
-                if user3 not in mutelist:
-                    print "unmute user %s success, mute list is: %s" % (user3, mutelist)
+            self.r = requests.delete("%s/%s/%s/chatgroups/%s/mute/%s" % (url, org, app, groupid,user3),
+                                    headers=self.headers)
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                mutelist = []
+                if data2['data']:
+                    for a in data2['data']:
+                        mutelist.append(a['user'])
+                    if user3 not in mutelist:
+                        print "unmute user %s success, mute list is: %s" % (user3, mutelist)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "unmute user %s failed, mute list is: %s" % (user3, mutelist)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
+                else:
+                    print "unmute user %s success" % user3
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return True
-                else:
-                    print "unmute user %s failed, mute list is: %s" % (user3, mutelist)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return False
             else:
-                print "unmute user %s success" % user3
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
             return False
@@ -540,21 +612,24 @@ class OperateGroup:
         # add a  member to admin
         print "groupid is: ", groupid
         try:
-            self.r = requests.post(
-                "%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid),
-                data=json.dumps(self.addAdminBody),
-                headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            adminlist = data2['data']
-            if user1 in adminlist:
-                print "add member %s to admin success, admin list is: %s" %(user1,adminlist)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid),data=json.dumps(self.addAdminBody),
+                                    headers=self.headers)
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                adminlist = data2['data']
+                if user1 in adminlist:
+                    print "add member %s to admin success, admin list is: %s" %(user1,adminlist)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "add member %s to admin failed, admin list is: %s" % (user1, adminlist)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "add member %s to admin failed, admin list is: %s" % (user1, adminlist)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -564,20 +639,24 @@ class OperateGroup:
         # delete a member to admin
         print "groupid is: ", groupid
         try:
-            self.r = requests.delete(
-                "%s/%s/%s/chatgroups/%s/admin/%s" % (url, org, app, groupid,user1),
-                headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            adminlist = data2['data']
-            if user1 not in adminlist:
-                print "delete member %s from admin list success, admin list is: %s" % (user1, adminlist)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            self.r = requests.delete("%s/%s/%s/chatgroups/%s/admin/%s" % (url, org, app, groupid,user1),
+                                    headers=self.headers)
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                adminlist = data2['data']
+                if user1 not in adminlist:
+                    print "delete member %s from admin list success, admin list is: %s" % (user1, adminlist)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "delete member %s from admin list  failed, admin list is: %s" % (user1, adminlist)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "delete member %s from admin list  failed, admin list is: %s" % (user1, adminlist)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -607,24 +686,28 @@ class OperateGroup:
             userheaders = {'Accept': 'application/json',
                        'Content-Type': 'application/json',
                        'Authorization': "Bearer %s" % usertokens}
-            self.r = requests.post(
-                "%s/%s/%s/chatgroups/%s/apply" % (url, org, app, groupid),
-                headers=userheaders)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            members = []
-            for a in data2['data']:
-                for x, y in a.items():
-                    members.append(y)
-            print "members is: ",members
-            if user3 in members:
-                print "user %s apply join groups is success, now members is: %s" %(user3,members)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/apply" % (url, org, app, groupid),
+                                    headers=userheaders)
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                members = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        members.append(y)
+                print "members is: ",members
+                if user3 in members:
+                    print "user %s apply join groups is success, now members is: %s" %(user3,members)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "user %s apply join groups is failed, now members is: %s" % (user3, members)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "user %s apply join groups is failed, now members is: %s" % (user3, members)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -635,16 +718,21 @@ class OperateGroup:
         print "groupid is: ", groupid
         try:
             self.r = requests.delete("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid), headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            if get.status_code == 404 and groupid in data2['error_description']:
-                print "delete group %s success" %groupid
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                if get.status_code == 404 and groupid in data2['error_description']:
+                    print "delete group %s success" %groupid
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "delete group %s failed" % groupid
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "delete group %s failed" % groupid
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -653,16 +741,21 @@ class OperateGroup:
     def CrePubVerify(self):
         try:
             self.r = requests.post("%s/%s/%s/chatgroups" % (url, org, app),data=json.dumps(self.CPGVbody), headers=self.headers)
-            data = self.r.json()
-            if data['data']['groupid']:
-                global cPubVrfyGrpID
-                cPubVrfyGrpID = data['data']['groupid']
-                print "Create public need verify groups success, group id is: ",cPubVrfyGrpID
-                print json.dumps(data, sort_keys=True, indent=2)
-                return True,cPubVrfyGrpID
+            if self.r.status_code == 200:
+                data = self.r.json()
+                if data['data']['groupid']:
+                    global cPubVrfyGrpID
+                    cPubVrfyGrpID = data['data']['groupid']
+                    print "Create public need verify groups success, group id is: ",cPubVrfyGrpID
+                    print json.dumps(data, sort_keys=True, indent=2)
+                    return True,cPubVrfyGrpID
+                else:
+                    print "Create public need verify groups Failed"
+                    return False,None
             else:
-                print "Create public need verify groups Failed"
-                return False,None
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
             return False,None
@@ -671,24 +764,28 @@ class OperateGroup:
         # verify apply join group
         print "groupid is: ", groupid
         try:
-            self.r = requests.post("%s/%s/%s/chatgroups/%s/apply_verify" % (url, org, app, groupid),
-                                   data=json.dumps(self.verifyBody),
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/apply_verify" % (url, org, app, groupid),data=json.dumps(self.verifyBody),
                                    headers=self.headers)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            members = []
-            for a in data2['data']:
-                for x, y in a.items():
-                    members.append(y)
-            print "members is: ", members
-            if user3 in members:
-                print "verify user %s apply join groups is success, now members is: %s" % (user3, members)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                members = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        members.append(y)
+                print "members is: ", members
+                if user3 in members:
+                    print "verify user %s apply join groups is success, now members is: %s" % (user3, members)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "verify user %s apply join groups is failed, now members is: %s" % (user3, members)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "verify user %s apply join groups is failed, now members is: %s" % (user3, members)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -697,16 +794,21 @@ class OperateGroup:
     def CrePrivateGrp(self):
         try:
             self.r = requests.post("%s/%s/%s/chatgroups" % (url, org, app),data=json.dumps(self.privateBody), headers=self.headers)
-            data = self.r.json()
-            if data['data']['groupid']:
-                global GroupID
-                GroupID = data['data']['groupid']
-                print "Create private groups success, group id is: ",GroupID
-                print json.dumps(data, sort_keys=True, indent=2)
-                return True,GroupID
+            if self.r.status_code == 200:
+                data = self.r.json()
+                if data['data']['groupid']:
+                    global GroupID
+                    GroupID = data['data']['groupid']
+                    print "Create private groups success, group id is: ",GroupID
+                    print json.dumps(data, sort_keys=True, indent=2)
+                    return True,GroupID
+                else:
+                    print "Create private groups Failed"
+                    return False,None
             else:
-                print "Create private groups Failed"
-                return False,None
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
             return False,None
@@ -714,16 +816,21 @@ class OperateGroup:
     def CtePrivAllowGrp(self):
         try:
             self.r = requests.post("%s/%s/%s/chatgroups" % (url, org, app),data=json.dumps(self.privateAllowBody), headers=self.headers)
-            data = self.r.json()
-            if data['data']['groupid']:
-                global GroupID
-                GroupID = data['data']['groupid']
-                print "Create private allow Invite groups success, group id is: ",GroupID
-                print json.dumps(data, sort_keys=True, indent=2)
-                return True,GroupID
+            if self.r.status_code == 200:
+                data = self.r.json()
+                if data['data']['groupid']:
+                    global GroupID
+                    GroupID = data['data']['groupid']
+                    print "Create private allow Invite groups success, group id is: ",GroupID
+                    print json.dumps(data, sort_keys=True, indent=2)
+                    return True,GroupID
+                else:
+                    print "Create private allow Invite groups Failed"
+                    return False,None
             else:
-                print "Create private allow Invite groups Failed"
-                return False,None
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
             return False,None
@@ -733,21 +840,26 @@ class OperateGroup:
         print "groupid is: ", groupid
         try:
             self.r = requests.delete("%s/%s/%s/chatgroups/%s/quit" % (url, org, app, groupid), headers=userheaders)
-            data1 = self.r.json()
-            get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data2 = get.json()
-            members = []
-            for a in data2['data']:
-                for x, y in a.items():
-                    members.append(y)
-            print "members is: ", members
-            if user3 not in members:
-                print "user %s leave groups is success, now members is: %s" % (user3, members)
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                data2 = get.json()
+                members = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        members.append(y)
+                print "members is: ", members
+                if user3 not in members:
+                    print "user %s leave groups is success, now members is: %s" % (user3, members)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "verify user %s apply join groups is failed, now members is: %s" % (user3, members)
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "verify user %s apply join groups is failed, now members is: %s" % (user3, members)
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e

@@ -58,13 +58,13 @@ class TestChatRoom(unittest.TestCase):
         self.assertTrue(self.TCR.RmRoomAdmin(roomid,user2), True)
     def testMuteMembet_15(self):
         u'禁言一个聊天室成员'
-        self.assertEqual(self.TCR.RoomMuteMember(roomid,user2),200)
+        self.assertTrue(self.TCR.RoomMuteMember(roomid,user2), True)
     def testGetMuteList_16(self):
         u'获取禁言成员的列表'
-        self.assertEqual(self.TCR.getMuteList(roomid),200)
+        self.assertTrue(self.TCR.getMuteList(roomid), True)
     def testRmMuteMember_17(self):
         u'给禁言成员解除禁言'
-        self.assertEqual(self.TCR.RmMuteMember(roomid,user2),200)
+        self.assertTrue(self.TCR.RmMuteMember(roomid,user2), True)
     def testDelChatroom_18(self):
         u'删除聊天室'
-        self.assertEqual(self.TCR.DelChatRoom(roomid),200)
+        self.assertTrue(self.TCR.DelChatRoom(roomid), True)

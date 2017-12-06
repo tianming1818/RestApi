@@ -167,19 +167,24 @@ class SendCmdGetInfo:
         # get user chat history message in online
         try:
             self.r = requests.get("%s/%s/%s/chatmessages/%s" % (url, org, app, olddate), headers=self.headers)
-            data1 = self.r.json()
-            result = data1['data'][0]['url']
-            if result:
-                print "get history message success, url is: ", result
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                result = data1['data'][0]['url']
+                if result:
+                    print "get history message success, url is: ", result
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "get history message failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "get history message failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except (KeyError,requests.exceptions.ConnectionError), e:
             print "Your url is error or return result error: %s" % e
-            print json.dumps(data1, sort_keys=True, indent=2)
+            print json.dumps(self.r.json(), sort_keys=True, indent=2)
             return False
 
     @ornament

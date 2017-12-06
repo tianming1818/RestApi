@@ -35,7 +35,7 @@ class UserManage:
                     print "Get client secret Failed"
                     return False, None, None
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except (KeyError,requests.exceptions.ConnectionError), e:
@@ -63,7 +63,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -87,7 +87,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -141,7 +141,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -199,7 +199,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -249,7 +249,7 @@ class UserManage:
                     print json.dumps(data, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error",self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except (ValueError,Exception),e:
@@ -275,7 +275,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -301,7 +301,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -324,7 +324,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -360,7 +360,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -386,7 +386,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -412,7 +412,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -439,7 +439,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -465,7 +465,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
@@ -493,7 +493,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error", self.r.status_code
+                print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
