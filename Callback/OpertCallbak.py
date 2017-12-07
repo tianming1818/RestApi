@@ -55,14 +55,19 @@ class HxCallback:
     def queryCBDetail(self):
         try:
             self.r = requests.get("%s/%s/%s/callbacks/%s" %(url,org,app,CBName),headers=self.headers)
-            data1 = self.r.json()
-            if data1["entities"][0]["name"] == CBName:
-                print "get create callback details success"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                if data1["entities"][0]["name"] == CBName:
+                    print "get create callback details success"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "get create callback details failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "get create callback details failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except (KeyError,requests.exceptions.ConnectionError),e:
             print "Your url is error or query callback failed: ", e
@@ -72,14 +77,19 @@ class HxCallback:
     def modifyCB(self):
         try:
             self.r = requests.put("%s/%s/%s/callbacks/%s" %(url,org,app,CBName),data=json.dumps(self.modifybody),headers=self.headers)
-            data1 = self.r.json()
-            if data1["entities"][0]["actionParams"]["hxSecret"] == modifybody["hxSecret"] and data1["entities"][0]["actionParams"]["secret"] ==modifybody["secret"]:
-                print "callback modify success"
-                print json.dumps(data1, sort_keys=True, indent=2)
-                return True
+            if self.r.status_code == 200:
+                data1 = self.r.json()
+                if data1["entities"][0]["actionParams"]["hxSecret"] == modifybody["hxSecret"] and data1["entities"][0]["actionParams"]["secret"] ==modifybody["secret"]:
+                    print "callback modify success"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return True
+                else:
+                    print "callback modify Failed"
+                    print json.dumps(data1, sort_keys=True, indent=2)
+                    return False
             else:
-                print "callback modify Failed"
-                print json.dumps(data1, sort_keys=True, indent=2)
+                print "status code is %s, request error" % self.r.status_code
+                print json.dumps(self.r.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError,e:
             print "Your url is error: %s" % e

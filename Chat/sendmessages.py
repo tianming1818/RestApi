@@ -310,6 +310,7 @@ class TextMessage:
         except requests.exceptions.ConnectionError,e:
             print "Your url is error",e
             return "Your url is error ",  e
+
     def uploadVideo(self):
         uploadHeader = {'restrict-access': 'true',
                         'Authorization': "Bearer %s" % token}
