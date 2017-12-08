@@ -278,8 +278,8 @@ class TextMessage:
         file = {'file': ('scenery.png', open('scenery.png', 'rb'), 'image/jpeg')}
         try:
             self.r = requests.post("%s/%s/%s/chatfiles/" %(url,org,app), files=file, headers=uploadHeader)
-            data = self.r.json()
             if self.r.status_code == 200:
+                data = self.r.json()
                 print "image upload success"
                 imageurl = data['uri'] + '/' + data['entities'][0]['uuid']
                 print "image url is: ", imageurl
@@ -298,8 +298,8 @@ class TextMessage:
         file = {'file': ('111.mp3', open('111.mp3', 'rb'))}
         try:
             self.r = requests.post("%s/%s/%s/chatfiles/" %(url,org,app), files=file, headers=uploadHeader)
-            data = self.r.json()
             if self.r.status_code == 200:
+                data = self.r.json()
                 print "Audio upload success"
                 audiourl = data['uri'] + '/' + data['entities'][0]['uuid']
                 print "Audio url is: ", audiourl
@@ -318,8 +318,8 @@ class TextMessage:
         file = {'file': ('345.mp4', open('345.mp4', 'rb'))}
         try:
             self.r = requests.post("%s/%s/%s/chatfiles/" %(url,org,app), files=file, headers=uploadHeader)
-            data = self.r.json()
             if self.r.status_code == 200:
+                data = self.r.json()
                 print "video upload success"
                 videourl = data['uri'] + '/' + data['entities'][0]['uuid']
                 print "video url is: ", videourl

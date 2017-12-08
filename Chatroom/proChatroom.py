@@ -71,14 +71,19 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s" % (url, org, app, roomid),
                                       headers=self.headers)
-                data2 = get.json()
-                if data2['data'][0]['name'] == self.modifyBody["name"] and data2['data'][0]['maxusers'] == self.modifyBody["maxusers"]:
-                    print "modify chat room success"
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    if data2['data'][0]['name'] == self.modifyBody["name"] and data2['data'][0]['maxusers'] == self.modifyBody["maxusers"]:
+                        print "modify chat room success"
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "modify chat room failed"
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "modify chat room failed"
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -120,18 +125,23 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s" % (url, org, app, roomid),
                                       headers=self.headers)
-                data2 = get.json()
-                members = []
-                for a in data2["data"][0]["affiliations"]:
-                    for x, y in a.items():
-                        members.append(y)
-                if userroom in members:
-                    print "Invite chatroom member %s success" % userroom
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    members = []
+                    for a in data2["data"][0]["affiliations"]:
+                        for x, y in a.items():
+                            members.append(y)
+                    if userroom in members:
+                        print "Invite chatroom member %s success" % userroom
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "Invite chatroom member %s failed" % userroom
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "Invite chatroom member %s failed" % userroom
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -152,18 +162,23 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s" % (url, org, app, roomid),
                                    headers=self.headers)
-                data2 = get.json()
-                members = []
-                for a in data2["data"][0]["affiliations"]:
-                    for x, y in a.items():
-                        members.append(y)
-                if user3 in members and user4 in members:
-                    print "Invite chatroom multi members %s %s success" % (user3,user4)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    members = []
+                    for a in data2["data"][0]["affiliations"]:
+                        for x, y in a.items():
+                            members.append(y)
+                    if user3 in members and user4 in members:
+                        print "Invite chatroom multi members %s %s success" % (user3,user4)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "Invite chatroom multi members %s %s failed" % (user3,user4)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "Invite chatroom multi members %s %s failed" % (user3,user4)
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -182,18 +197,23 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s" % (url, org, app, roomid),
                                    headers=self.headers)
-                data2 = get.json()
-                members = []
-                for a in data2["data"][0]["affiliations"]:
-                    for x, y in a.items():
-                        members.append(y)
-                if userroom not in members:
-                    print "Kick chatroom member %s success" % userroom
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    members = []
+                    for a in data2["data"][0]["affiliations"]:
+                        for x, y in a.items():
+                            members.append(y)
+                    if userroom not in members:
+                        print "Kick chatroom member %s success" % userroom
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "Kick chatroom member %s failed" % userroom
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "Kick chatroom member %s failed" % userroom
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -212,18 +232,23 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s" % (url, org, app, roomid),
                                    headers=self.headers)
-                data2 = get.json()
-                members = []
-                for a in data2["data"][0]["affiliations"]:
-                    for x, y in a.items():
-                        members.append(y)
-                if user3 not in members and user4 not in members:
-                    print "Kick chatroom multi members %s %s success" % (user3, user4)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    members = []
+                    for a in data2["data"][0]["affiliations"]:
+                        for x, y in a.items():
+                            members.append(y)
+                    if user3 not in members and user4 not in members:
+                        print "Kick chatroom multi members %s %s success" % (user3, user4)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "Kick chatroom multi members %s %s failed" % (user3, user4)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "Kick chatroom multi members %s %s failed" % (user3, user4)
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -298,14 +323,19 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s/admin" % (url, org, app, roomid),
                                        headers=self.headers)
-                data2 = get.json()
-                if roomuser in data2['data']:
-                    print "add chatroom admin %s success" % roomuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    if roomuser in data2['data']:
+                        print "add chatroom admin %s success" % roomuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "add chatroom admin %s failed" % roomuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "add chatroom admin %s failed" % roomuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -349,14 +379,19 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s/admin" % (url, org, app, roomid),
                                        headers=self.headers)
-                data2 = get.json()
-                if roomuser not in data2["data"]:
-                    print "remove chatroom admin %s success" % roomuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    if roomuser not in data2["data"]:
+                        print "remove chatroom admin %s success" % roomuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "remove chatroom admin %s failed" % roomuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "remove chatroom admin %s failed" % roomuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -377,17 +412,22 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s/mute" % (url, org, app, roomid),
                              headers=self.headers)
-                data2 = get.json()
-                mutelist = []
-                for a in data2['data']:
-                    mutelist.append(a["user"])
-                if roomuser in mutelist:
-                    print "chatroom mute member %s success" % roomuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    mutelist = []
+                    for a in data2['data']:
+                        mutelist.append(a["user"])
+                    if roomuser in mutelist:
+                        print "chatroom mute member %s success" % roomuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "chatroom mute member %s failed" % roomuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "chatroom mute member %s failed" % roomuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -429,17 +469,22 @@ class chatroom:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatrooms/%s/mute" % (url, org, app, roomid),
                                    headers=self.headers)
-                data2 = get.json()
-                mutelist = []
-                for a in data2['data']:
-                    mutelist.append(a["user"])
-                if roomuser not in mutelist:
-                    print "chatroom unmute member %s success" % roomuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    mutelist = []
+                    for a in data2['data']:
+                        mutelist.append(a["user"])
+                    if roomuser not in mutelist:
+                        print "chatroom unmute member %s success" % roomuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "chatroom unmute member %s failed" % roomuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "chatroom unmute member %s failed" % roomuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -467,6 +512,7 @@ class chatroom:
                     print "delete chatroom id %s failed" % roomid
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
+
             else:
                 print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)

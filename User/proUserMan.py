@@ -137,7 +137,10 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return True
                 else:
-                    print "create multi user failed"
+                    print "create multi user failed, get %s detail status_code is: %s, " \
+                          "get %s detail status_code is: %s, get %s detail status_code is: %s," %(user7,get1.status_code,
+                                                                                                  user8,get2.status_code,
+                                                                                                  user9,get3.status_code)
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
@@ -265,14 +268,19 @@ class UserManage:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
                                       headers=self.headers)
-                data2 = get.json()
-                if friend in data2["data"]:
-                    print "user %s additional friend %s success" %(user,friend)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    if friend in data2["data"]:
+                        print "user %s additional friend %s success" %(user,friend)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "user %s additional friend %s failed" % (user, friend)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "user %s additional friend %s failed" % (user, friend)
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -291,14 +299,19 @@ class UserManage:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
                                    headers=self.headers)
-                data2 = get.json()
-                if friend not in data2["data"]:
-                    print "user %s delete friend %s success" % (user, friend)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    if friend not in data2["data"]:
+                        print "user %s delete friend %s success" % (user, friend)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "user %s delete friend %s failed" % (user, friend)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "user %s delete friend %s failed" % (user, friend)
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -376,14 +389,19 @@ class UserManage:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/users/%s/blocks/users" % (url, org, app, user),
                                       headers=self.headers)
-                data2 = get.json()
-                if blackuser not in data2["data"]:
-                    print "blackuser %s remove from black list success" %blackuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    if blackuser not in data2["data"]:
+                        print "blackuser %s remove from black list success" %blackuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "blackuser %s remove from black list failed" % blackuser
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "blackuser %s remove from black list failed" % blackuser
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -402,14 +420,19 @@ class UserManage:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
                                       headers=self.headers)
-                data2 = get.json()
-                if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == False:
-                    print "deactivate user %s success" % user
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == False:
+                        print "deactivate user %s success" % user
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "deactivate user %s failed" % user
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "deactivate user %s failed" % user
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -428,15 +451,20 @@ class UserManage:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
                                    headers=self.headers)
-                data2 = get.json()
-                activate = data2['entities'][0]['activated']
-                if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == True:
-                    print "Activate user %s success" % user
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    activate = data2['entities'][0]['activated']
+                    if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == True:
+                        print "Activate user %s success" % user
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "Activate user %s failed" % user
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "Activate user %s failed" % user
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -455,14 +483,19 @@ class UserManage:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/users/%s/status" % (url, org, app, user1),
                                       headers=self.headers)
-                data2 = get.json()
-                if data2["data"][user1]== 'offline':
-                    print "Disconnect user %s success" %user1
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    if data2["data"][user1]== 'offline':
+                        print "Disconnect user %s success" %user1
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "Disconnect user %s failed" %user1
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "Disconnect user %s failed" %user1
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
