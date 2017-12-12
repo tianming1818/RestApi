@@ -187,7 +187,10 @@ class OperateGroup:
                 #get group all members api
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
                 data2 = get.json()
-                owners = data2["data"][-1]["owner"]
+                for a in data2['data']:
+                    for x, y in a.items():
+                        if x == 'owner':
+                            owners = y
                 if owners == user1:
                     print "Create public groups success, group id is: ",groupid
                     print json.dumps(data1, sort_keys=True, indent=2)
@@ -214,8 +217,11 @@ class OperateGroup:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
                 data2 = get.json()
-                members = data2["data"][0]["member"]
-                if members == user3:
+                newmembers = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        newmembers.append(y)
+                if user3 in newmembers:
                     print "add group member %s success, group all member is: %s" %(user3,data2["data"])
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return True
@@ -242,12 +248,11 @@ class OperateGroup:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
                 data2 = get.json()
-                newmember = []
-                mem1 = data2["data"][0]["member"]
-                mem2 = data2["data"][1]["member"]
-                newmember.append(mem1)
-                newmember.append(mem2)
-                if user4 in newmember and user5 in newmember:
+                newmembers = []
+                for a in data2['data']:
+                    for x, y in a.items():
+                        newmembers.append(y)
+                if user4 in newmembers and user5 in newmembers:
                     print "add group multe members %s %s success, group all member is: %s" %(user4,user5,data2["data"])
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return True
@@ -275,7 +280,10 @@ class OperateGroup:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
                 data2 = get.json()
-                newowner = data2["data"][-2]["owner"]
+                for a in data2['data']:
+                    for x, y in a.items():
+                        if x == 'owner':
+                            newowner = y
                 if newowner == user2:
                     print "Transfer groups new owner %s success, group members: %s" %(user2,data2["data"])
                     print json.dumps(data1, sort_keys=True, indent=2)
