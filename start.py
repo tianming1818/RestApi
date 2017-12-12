@@ -3,6 +3,7 @@
 import HTMLTestRunner as htr
 import unittest
 import sys,os
+import collections
 
 url = sys.argv[1]
 org = sys.argv[2]
@@ -25,7 +26,7 @@ from TestInspect.verifyNotifier import *
 if __name__ == "__main__":
     suite = unittest.TestSuite()
     try:
-        rest = {}
+        rest = collections.OrderedDict()
         key6 = TestMessageTestCase
         value6 = ["testTM_1","testSendtwo_2","getfriend_3","testUpImage_4","testsendImage_5","testUpAudio_6","testsendAudio_7",
                                      "testUpVideo_8", "testsendVideo_9","testsendNotic_10","testsendLoc_11","testForceNotifi_12","testPushTitle_13",
