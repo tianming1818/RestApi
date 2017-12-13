@@ -6,7 +6,7 @@ sys.path.append("..")
 from apiconfig import *
 from User.userbody import *
 import requests
-import json
+import json,time
 
 class UserManage:
     def __init__(self,headers,userToken,cteUserBody,cteMultiUsrBody,setPWordBody,nicknameBody,MulUserStatBody):
@@ -21,8 +21,7 @@ class UserManage:
     def getClitSecret(self):
         # get client secret
         try:
-            self.r = requests.get("%s/%s/%s/credentials" % (url, org, app),
-                                  headers=self.headers)
+            self.r = requests.get("%s/%s/%s/credentials" % (url, org, app),headers=self.headers)
             if self.r.status_code == 200:
                 data = self.r.json()
                 if data['credentials']['client_id']:
@@ -98,8 +97,7 @@ class UserManage:
     def getAllUser(self):
         # get All user info
         try:
-            self.r = requests.get("%s/%s/%s/users" % (url, org, app),
-                                   headers=self.headers)
+            self.r = requests.get("%s/%s/%s/users" % (url, org, app),headers=self.headers)
         except requests.exceptions.ConnectionError, e:
             return "Your url is error: %s" %e
         else:
@@ -109,9 +107,7 @@ class UserManage:
     def CreateUser(self):
         # create a user
         try:
-            self.r = requests.post("%s/%s/%s/users" % (url, org, app),
-                                  data=json.dumps(self.cteUserBody),
-                                  headers=self.headers)
+            self.r = requests.post("%s/%s/%s/users" % (url, org, app),data=json.dumps(self.cteUserBody),headers=self.headers)
         except requests.exceptions.ConnectionError, e:
             return "Your url is error: %s" %e
         else:
@@ -120,18 +116,13 @@ class UserManage:
     def CrteMulieUser(self):
         # create multi users
         try:
-            self.r = requests.post("%s/%s/%s/users" % (url, org, app),
-                                   data=json.dumps(self.cteMultiUsrBody),
-                                   headers=self.headers)
+            self.r = requests.post("%s/%s/%s/users" % (url, org, app),data=json.dumps(self.cteMultiUsrBody),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
-                get1 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user7),
-                                      headers=self.headers)
+                get1 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user7),headers=self.headers)
 
-                get2 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user8),
-                                   headers=self.headers)
-                get3 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user9),
-                                    headers=self.headers)
+                get2 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user8),headers=self.headers)
+                get3 = requests.get("%s/%s/%s/users/%s" % (url, org, app, user9),headers=self.headers)
                 if get1.status_code == 200 and get2.status_code == 200 and get3.status_code == 200:
                     print "create multi user success"
                     print json.dumps(data1, sort_keys=True, indent=2)
@@ -155,8 +146,7 @@ class UserManage:
     def getUserDetail(self):
         # get a user details
         try:
-            self.r = requests.get("%s/%s/%s/users/%s" % (url, org, app, user6),
-                                  headers=self.headers)
+            self.r = requests.get("%s/%s/%s/users/%s" % (url, org, app, user6),headers=self.headers)
         except requests.exceptions.ConnectionError, e:
             return "Your url is error: %s" %e
         else:
@@ -166,8 +156,7 @@ class UserManage:
     def getMulUsrDetail(self):
         # get Multi user detail
         try:
-            self.r = requests.get("%s/%s/%s/users?limit=30" % (url, org, app),
-                                  headers=self.headers)
+            self.r = requests.get("%s/%s/%s/users?limit=30" % (url, org, app),headers=self.headers)
         except requests.exceptions.ConnectionError, e:
             return "Your url is error: %s" %e
         else:
@@ -187,19 +176,20 @@ class UserManage:
     def deleteUser(self,user):
         # delete a user
         try:
-            self.r = requests.delete("%s/%s/%s/users/%s" % (url, org, app, user),
-                                  headers=self.headers)
+            self.r = requests.delete("%s/%s/%s/users/%s" % (url, org, app, user),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
-                get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
-                                    headers=self.headers)
+                time.sleep(1)
+                get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),headers=self.headers)
+                data2 = get.json()
                 if get.status_code == 404:
                     print "delete user %s success" % user
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return True
                 else:
-                    print "delete user %s failed" % user
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "delete user %s failed, get deleted user detail status code is not 404, is %s " % (user,get.status_code)
+                    print "delete user,get user detail: "
+                    print json.dumps(data2, sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -262,12 +252,10 @@ class UserManage:
     def addFriends(self,user,friend):
         # add friend for user
         try:
-            self.r = requests.post("%s/%s/%s/users/%s/contacts/users/%s" % (url, org, app, user,friend),
-                                  headers=self.headers)
+            self.r = requests.post("%s/%s/%s/users/%s/contacts/users/%s" % (url, org, app, user,friend),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
-                get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),
-                                      headers=self.headers)
+                get = requests.get("%s/%s/%s/users/%s/contacts/users" % (url, org, app, user),headers=self.headers)
                 if get.status_code == 200:
                     data2 = get.json()
                     if friend in data2["data"]:
@@ -276,10 +264,11 @@ class UserManage:
                         return True
                     else:
                         print "user %s additional friend %s failed" % (user, friend)
-                        print json.dumps(data1, sort_keys=True, indent=2)
+                        print "get user friends list return data: "
+                        print json.dumps(data2, sort_keys=True, indent=2)
                         return False
                 else:
-                    print "status code is %s, request error" % self.r.status_code
+                    print "status code is %s, request error" % get.status_code
                     print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
@@ -310,7 +299,7 @@ class UserManage:
                         print json.dumps(data1, sort_keys=True, indent=2)
                         return False
                 else:
-                    print "status code is %s, request error" % self.r.status_code
+                    print "status code is %s, request error" % get.status_code
                     print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
@@ -383,12 +372,10 @@ class UserManage:
     def RmBlkList(self, user,blackuser):
         # remove friend from black list
         try:
-            self.r = requests.delete("%s/%s/%s/users/%s/blocks/users/%s" % (url, org, app, user,blackuser),
-                                  headers=self.headers)
+            self.r = requests.delete("%s/%s/%s/users/%s/blocks/users/%s" % (url, org, app, user,blackuser),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
-                get = requests.get("%s/%s/%s/users/%s/blocks/users" % (url, org, app, user),
-                                      headers=self.headers)
+                get = requests.get("%s/%s/%s/users/%s/blocks/users" % (url, org, app, user),headers=self.headers)
                 if get.status_code == 200:
                     data2 = get.json()
                     if blackuser not in data2["data"]:
@@ -400,7 +387,7 @@ class UserManage:
                         print json.dumps(data1, sort_keys=True, indent=2)
                         return False
                 else:
-                    print "status code is %s, request error" % self.r.status_code
+                    print "status code is %s, request error" % get.status_code
                     print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
@@ -414,12 +401,10 @@ class UserManage:
     def DeactivateUser(self, user):
         # Deactivate a User
         try:
-            self.r = requests.post("%s/%s/%s/users/%s/deactivate" % (url, org, app, user),
-                                  headers=self.headers)
+            self.r = requests.post("%s/%s/%s/users/%s/deactivate" % (url, org, app, user),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
-                get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),
-                                      headers=self.headers)
+                get = requests.get("%s/%s/%s/users/%s" % (url, org, app, user),headers=self.headers)
                 if get.status_code == 200:
                     data2 = get.json()
                     if data2['entities'][0]['username'] == user and data2['entities'][0]['activated'] == False:
@@ -431,7 +416,7 @@ class UserManage:
                         print json.dumps(data1, sort_keys=True, indent=2)
                         return False
                 else:
-                    print "status code is %s, request error" % self.r.status_code
+                    print "status code is %s, request error" % get.status_code
                     print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
@@ -463,7 +448,7 @@ class UserManage:
                         print json.dumps(data1, sort_keys=True, indent=2)
                         return False
                 else:
-                    print "status code is %s, request error" % self.r.status_code
+                    print "status code is %s, request error" % get.status_code
                     print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
@@ -477,12 +462,10 @@ class UserManage:
     def DisconnectUser(self):
         # Disconnect User
         try:
-            self.r = requests.get("%s/%s/%s/users/%s/disconnect" % (url, org, app, user1),
-                                   headers=self.headers)
+            self.r = requests.get("%s/%s/%s/users/%s/disconnect" % (url, org, app, user1),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
-                get = requests.get("%s/%s/%s/users/%s/status" % (url, org, app, user1),
-                                      headers=self.headers)
+                get = requests.get("%s/%s/%s/users/%s/status" % (url, org, app, user1),headers=self.headers)
                 if get.status_code == 200:
                     data2 = get.json()
                     if data2["data"][user1]== 'offline':
@@ -494,7 +477,7 @@ class UserManage:
                         print json.dumps(data1, sort_keys=True, indent=2)
                         return False
                 else:
-                    print "status code is %s, request error" % self.r.status_code
+                    print "status code is %s, request error" % get.status_code
                     print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:

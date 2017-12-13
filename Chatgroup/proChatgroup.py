@@ -273,9 +273,7 @@ class OperateGroup:
         # group Transfer
         print "groupid is: ", groupid
         try:
-            self.r = requests.put("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid),
-                                   data=json.dumps(self.transbody),
-                                   headers=self.headers)
+            self.r = requests.put("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid),data=json.dumps(self.transbody),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
@@ -310,9 +308,7 @@ class OperateGroup:
             data0 =get.json()
             oldmaxuser = data0['data'][0]['maxusers']
             oldname = data0['data'][0]['name']
-            self.r = requests.put("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid),
-                                  data=json.dumps(self.modifygrp),
-                                  headers=self.headers)
+            self.r = requests.put("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid),data=json.dumps(self.modifygrp),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 # group details api
@@ -346,8 +342,7 @@ class OperateGroup:
             for a in data0['data']:
                 for x, y in a.items():
                     oldmember.append(y)
-            self.r = requests.delete("%s/%s/%s/chatgroups/%s/users/%s" % (url, org, app, groupid, user3),
-                                   headers=self.headers)
+            self.r = requests.delete("%s/%s/%s/chatgroups/%s/users/%s" % (url, org, app, groupid, user3),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
@@ -382,8 +377,7 @@ class OperateGroup:
             for a in data0['data']:
                 for x, y in a.items():
                     oldmember.append(y)
-            self.r = requests.delete("%s/%s/%s/chatgroups/%s/users/%s,%s" % (url, org, app, groupid, user4,user5),
-                                     headers=self.headers)
+            self.r = requests.delete("%s/%s/%s/chatgroups/%s/users/%s,%s" % (url, org, app, groupid, user4,user5),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
@@ -411,8 +405,7 @@ class OperateGroup:
         #move group member to black
         print "groupid is: ", groupid
         try:
-            self.r = requests.post("%s/%s/%s/chatgroups/%s/blocks/users/%s" % (url, org, app, groupid, user3),
-                                     headers=self.headers)
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/blocks/users/%s" % (url, org, app, groupid, user3),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
@@ -479,8 +472,7 @@ class OperateGroup:
         #rm member from black
         print "groupid is: ", groupid
         try:
-            self.r = requests.delete("%s/%s/%s/chatgroups/%s/blocks/users/%s" % (url, org, app, groupid, user3),
-                                     headers=self.headers)
+            self.r = requests.delete("%s/%s/%s/chatgroups/%s/blocks/users/%s" % (url, org, app, groupid, user3),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
@@ -542,8 +534,7 @@ class OperateGroup:
         }
         print "groupid is: ", groupid
         try:
-            self.r = requests.post("%s/%s/%s/messages" %(url, org, app),data=json.dumps(sendmessBody),
-                headers=self.headers)
+            self.r = requests.post("%s/%s/%s/messages" %(url, org, app),data=json.dumps(sendmessBody),headers=self.headers)
         except requests.exceptions.ConnectionError, e:
             return "Your url is error: %s" % e
         else:
@@ -553,8 +544,7 @@ class OperateGroup:
         # mute member
         print "groupid is: ", groupid
         try:
-            self.r = requests.post("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid),data = json.dumps(self.muteMemBody),
-                                    headers=self.headers)
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid),data = json.dumps(self.muteMemBody),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid), headers=self.headers)
@@ -586,8 +576,7 @@ class OperateGroup:
         # unmute member
         print "groupid is: ", groupid
         try:
-            self.r = requests.delete("%s/%s/%s/chatgroups/%s/mute/%s" % (url, org, app, groupid,user3),
-                                    headers=self.headers)
+            self.r = requests.delete("%s/%s/%s/chatgroups/%s/mute/%s" % (url, org, app, groupid,user3),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/mute" % (url, org, app, groupid), headers=self.headers)
@@ -620,8 +609,7 @@ class OperateGroup:
         # add a  member to admin
         print "groupid is: ", groupid
         try:
-            self.r = requests.post("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid),data=json.dumps(self.addAdminBody),
-                                    headers=self.headers)
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid),data=json.dumps(self.addAdminBody),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid), headers=self.headers)
@@ -647,8 +635,7 @@ class OperateGroup:
         # delete a member to admin
         print "groupid is: ", groupid
         try:
-            self.r = requests.delete("%s/%s/%s/chatgroups/%s/admin/%s" % (url, org, app, groupid,user1),
-                                    headers=self.headers)
+            self.r = requests.delete("%s/%s/%s/chatgroups/%s/admin/%s" % (url, org, app, groupid,user1),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/admin" % (url, org, app, groupid), headers=self.headers)
@@ -694,8 +681,7 @@ class OperateGroup:
             userheaders = {'Accept': 'application/json',
                        'Content-Type': 'application/json',
                        'Authorization': "Bearer %s" % usertokens}
-            self.r = requests.post("%s/%s/%s/chatgroups/%s/apply" % (url, org, app, groupid),
-                                    headers=userheaders)
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/apply" % (url, org, app, groupid),headers=userheaders)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
@@ -772,8 +758,7 @@ class OperateGroup:
         # verify apply join group
         print "groupid is: ", groupid
         try:
-            self.r = requests.post("%s/%s/%s/chatgroups/%s/apply_verify" % (url, org, app, groupid),data=json.dumps(self.verifyBody),
-                                   headers=self.headers)
+            self.r = requests.post("%s/%s/%s/chatgroups/%s/apply_verify" % (url, org, app, groupid),data=json.dumps(self.verifyBody),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
