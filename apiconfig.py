@@ -29,6 +29,7 @@ historymess = datetime.datetime.now() - datetime.timedelta(days=3)
 olddate = historymess.strftime('%Y%m%d%H')
 
 
+
 ## get Admin token
 def acquire_token(url,username,password):
     tokenbody = {
@@ -53,8 +54,20 @@ def acquire_token(url,username,password):
 
 token,expires_in = acquire_token(url,username,password)
 
-#print "Token is: %s, Expires_in is: %s" %(token,expires_in)
+print "Token is: %s, Expires_in is: %s" %(token,expires_in)
+'''
+#token = "YWMthsaJMtpMEeeORH166O_Q3gAAAAAAAAAAAAAAAAAAAAFe2JYa1n8R45heowo6U5LUAQMAAAFgKnTR2QBPGgA45in-uKuDCUlPHnPHc5iOvzL_qkiTyYRJOi8re-QzrA"
 
+
+#超级token
+#token = "YWMtmPpRmt5ZEeedV_961BhnFQAAAAAAAAAAAAAAAAAAAAFe2JYa1n8R45heowo6U5LUAQMAAAFgRQFecABPGgD7v50BoYYFAfDgr3XCGSgm9zdQGNyIseJjXBswqJQYSQ"
+
+#灰度token
+#token = "YWMtlIXhXM4YEeezpfcn9NztsAAAAAAAAAAAAAAAAAAAAAE0jHVaFpQR5oOh13fSZKt6AQMAAAFf2nu5qgBPGgCsETm-lBkrSIqrlQmESeEMS-WarDIpqx0VrTTSG6x9RQ"
+
+#ebs2超级token
+token = "YWMtOpwXCuVNEeeYz5WJF7Y7pQAAAWGnjexwtRAwHWPnRAS-TwyosxBdjm8FM14"
+'''
 
 headers = {'Accept': 'application/json',
             'Content-Type': 'application/json',

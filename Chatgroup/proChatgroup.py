@@ -247,18 +247,23 @@ class OperateGroup:
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-                data2 = get.json()
-                newmembers = []
-                for a in data2['data']:
-                    for x, y in a.items():
-                        newmembers.append(y)
-                if user4 in newmembers and user5 in newmembers:
-                    print "add group multe members %s %s success, group all member is: %s" %(user4,user5,data2["data"])
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    newmembers = []
+                    for a in data2['data']:
+                        for x, y in a.items():
+                            newmembers.append(y)
+                    if user4 in newmembers and user5 in newmembers:
+                        print "add group multe members %s %s success, group all member is: %s" %(user4,user5,data2["data"])
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "add group multe members %s %s failed, group all member is: %s" %(user4,user5,data2["data"])
+                        print json.dumps(data2, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "add group multe members %s %s failed, group all member is: %s" %(user4,user5,data2["data"])
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, get groups all members request error" % get.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -277,19 +282,27 @@ class OperateGroup:
             if self.r.status_code == 200:
                 data1 = self.r.json()
                 get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-                data2 = get.json()
-                for a in data2['data']:
-                    for x, y in a.items():
-                        if x == 'owner':
-                            newowner = y
-                if newowner == user2:
-                    print "Transfer groups new owner %s success, group members: %s" %(user2,data2["data"])
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True, groupid
+                if get.status_code == 200:
+                    data2 = get.json()
+                    for a in data2['data']:
+                        for x, y in a.items():
+                            if x == 'owner':
+                                newowner = y
+                    if newowner == user2:
+                        print "Transfer groups new owner %s success, group members: %s" %(user2,data2["data"])
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True, groupid
+                    else:
+                        print "Transfer groups new owner %s Failed, group members: %s" %(user2,data2["data"])
+                        print "group Transfer api return: "
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        print "get group all members api return: "
+                        print json.dumps(data2, sort_keys=True, indent=2)
+                        return False, None
                 else:
-                    print "Transfer groups new owner %s Failed, group members: %s" %(user2,data2["data"])
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return False, None
+                    print "status code is %s, get groups all members request error" % get.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
+                    return False
             else:
                 print "status code is %s, request error" % self.r.status_code
                 print json.dumps(self.r.json(), sort_keys=True, indent=2)
@@ -313,16 +326,23 @@ class OperateGroup:
                 data1 = self.r.json()
                 # group details api
                 get = requests.get("%s/%s/%s/chatgroups/%s" % (url, org, app, groupid), headers=self.headers)
-                data2 = get.json()
-                newmaxuser = data2['data'][0]['maxusers']
-                newname = data2['data'][0]['name']
-                if newmaxuser == self.modifygrp["maxusers"] and newname == self.modifygrp["groupname"]:
-                    print "Modify groups infomation success, group maxuser old is: %s, new is: %s; groupname old is: %s, new is: %s" % (oldmaxuser,newmaxuser,oldname,newname)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                if get.status_code == 200:
+                    data2 = get.json()
+                    newmaxuser = data2['data'][0]['maxusers']
+                    newname = data2['data'][0]['name']
+                    if newmaxuser == self.modifygrp["maxusers"] and newname == self.modifygrp["groupname"]:
+                        print "Modify groups infomation success, group maxuser old is: %s, new is: %s; groupname old is: %s, new is: %s" % (oldmaxuser,newmaxuser,oldname,newname)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "Modify groups infomation failed, group maxuser old is: %s, new is: %s; groupname old is: %s, new is: %s" % (oldmaxuser,newmaxuser,oldname,newname)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        print "get group details api return: "
+                        print json.dumps(data2, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "Modify groups infomation failed, group maxuser old is: %s, new is: %s; groupname old is: %s, new is: %s" % (oldmaxuser,newmaxuser,oldname,newname)
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, get group details api request error" % get.status_code
+                    print json.dumps(get.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code
@@ -336,32 +356,38 @@ class OperateGroup:
         # delete a group member
         print "groupid is: ", groupid
         try:
+            #Get All members of a Group
             get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-            data0 = get.json()
-            oldmember = []
-            for a in data0['data']:
-                for x, y in a.items():
-                    oldmember.append(y)
-            self.r = requests.delete("%s/%s/%s/chatgroups/%s/users/%s" % (url, org, app, groupid, user3),headers=self.headers)
-            if self.r.status_code == 200:
-                data1 = self.r.json()
-                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-                data2 = get.json()
-                newmember = []
-                for a in data2['data']:
+            if get.status_code == 200:
+                data0 = get.json()
+                oldmember = []
+                for a in data0['data']:
                     for x, y in a.items():
-                        newmember.append(y)
-                if user3 in oldmember and user3 not in newmember:
-                    print "delete group member %s success, now members list is: %s" %(user3,newmember)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                        oldmember.append(y)
+                self.r = requests.delete("%s/%s/%s/chatgroups/%s/users/%s" % (url, org, app, groupid, user3),headers=self.headers)
+                if self.r.status_code == 200:
+                    data1 = self.r.json()
+                    get2 = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                    data2 = get2.json()
+                    newmember = []
+                    for a in data2['data']:
+                        for x, y in a.items():
+                            newmember.append(y)
+                    if user3 in oldmember and user3 not in newmember:
+                        print "delete group member %s success, now members list is: %s" %(user3,newmember)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "delete group member %s failed, now members list is: %s" %(user3,newmember)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
                 else:
-                    print "delete group member %s failed, now members list is: %s" %(user3,newmember)
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, request error" % self.r.status_code
+                    print json.dumps(self.r.json(), sort_keys=True, indent=2)
                     return False
             else:
-                print "status code is %s, request error" % self.r.status_code
-                print json.dumps(self.r.json(), sort_keys=True, indent=2)
+                print "status code is %s, Get All members of a Group request error" % get.status_code
+                print json.dumps(get.json(), sort_keys=True, indent=2)
                 return False
         except requests.exceptions.ConnectionError, e:
             print "Your url is error: %s" % e
@@ -408,22 +434,32 @@ class OperateGroup:
             self.r = requests.post("%s/%s/%s/chatgroups/%s/blocks/users/%s" % (url, org, app, groupid, user3),headers=self.headers)
             if self.r.status_code == 200:
                 data1 = self.r.json()
-                get = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
-                data2 = get.json()
-                nowmember = []
-                for a in data2['data']:
-                    for x, y in a.items():
-                        nowmember.append(y)
-                get = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
-                data3 = get.json()
-                blacklist = data3['data']
-                if user3 in blacklist and user3 not in nowmember:
-                    print "move %s to black success, now member is: %s" %(user3,nowmember)
-                    print json.dumps(data1, sort_keys=True, indent=2)
-                    return True
+                get1 = requests.get("%s/%s/%s/chatgroups/%s/users" % (url, org, app, groupid), headers=self.headers)
+                if get1.status_code == 200:
+                    data2 = get1.json()
+                    nowmember = []
+                    for a in data2['data']:
+                        for x, y in a.items():
+                            nowmember.append(y)
                 else:
-                    print "move %s to black failed, now member is: %s" % (user3, nowmember)
-                    print json.dumps(data1, sort_keys=True, indent=2)
+                    print "status code is %s, get group all members request error" % get1.status_code
+                    print json.dumps(get1.json(), sort_keys=True, indent=2)
+                    return False
+                get2 = requests.get("%s/%s/%s/chatgroups/%s/blocks/users" % (url, org, app, groupid), headers=self.headers)
+                if get2.status_code == 200:
+                    data3 = get2.json()
+                    blacklist = data3['data']
+                    if user3 in blacklist and user3 not in nowmember:
+                        print "move %s to black success, now member is: %s" %(user3,nowmember)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return True
+                    else:
+                        print "move %s to black failed, now member is: %s" % (user3, nowmember)
+                        print json.dumps(data1, sort_keys=True, indent=2)
+                        return False
+                else:
+                    print "status code is %s, get black list request error" % get2.status_code
+                    print json.dumps(get2.json(), sort_keys=True, indent=2)
                     return False
             else:
                 print "status code is %s, request error" % self.r.status_code

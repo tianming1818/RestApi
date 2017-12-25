@@ -322,7 +322,7 @@ class UserManage:
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return True
                 else:
-                    print "get friend list failed"
+                    print "get friend list failed，error status code is: %s" % self.r.status_code
                     print json.dumps(data1, sort_keys=True, indent=2)
                     return False
             else:
