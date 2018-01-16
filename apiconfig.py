@@ -25,7 +25,7 @@ messages = "message from automation rest test"
 
 
 #get before 3 days date
-historymess = datetime.datetime.now() - datetime.timedelta(days=3)
+historymess = datetime.datetime.now() - datetime.timedelta(days=4)
 olddate = historymess.strftime('%Y%m%d%H')
 
 
