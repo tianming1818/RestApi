@@ -28,6 +28,7 @@ class Notifiers:
             "provider": "HUAWEIPUSH",
             "environment": "PRODUCTION",
             "certificate": "8o42az0cej2i2wgefk2y46yyed44sq4n"
+            "packageName": "com.hyphenate.chatuidemo"
          }
         try:
             self.r = requests.post("%s/%s/%s/notifiers" % (url, org, app),
